@@ -1,0 +1,40 @@
+{
+  "name": "vibbranf",
+  "version": "1.0.0",
+  "main": "sever.ts",
+  "license": "MIT",
+  "scripts": {
+    "dev": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules src/server",
+    "start": "ts-node-dev -r tsconfig-paths/register --transpile-only --ignore-watch node_modules src/server",
+    "typeorm": "ts-node-dev node_modules/typeorm/cli.js",
+    "test": "jest"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "celebrate": "^15.0.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
+    "handlebars": "^4.7.7",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "nodemailer": "^6.7.5",
+    "reflect-metadata": "^0.1.13",
+    "tsyringe": "^4.6.0",
+    "typeorm": "^0.2.32",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
+    "@types/cors": "^2.8.10",
+    "@types/express": "^4.17.12",
+    "@types/jest": "^26.0.23",
+    "@types/jsonwebtoken": "^8.5.1",
+    "@types/uuid": "^8.3.0",
+    "jest": "^27.0.1",
+    "ts-jest": "^27.0.1",
+    "ts-node-dev": "^1.1.6",
+    "tsconfig-paths": "^3.9.0",
+    "typescript": "^4.3.2"
+  }
+}

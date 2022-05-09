@@ -1,0 +1,181 @@
+import { Delete, Edit } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams, ptBR as br } from '@mui/x-data-grid';
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
+import * as React from 'react';
+import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import { DateFunctions } from '../helpers/dateFunctions';
+import { IInvoice } from '../interfaces/invoices.interface';
+import backendApi from '../services/backend.axios';
+import Title from './Title';
+
+interface Props {
+  onlyMonth: boolean
+}
+
+export default function InvoicesList({ onlyMonth }: Props) {
+  const [invoices, setInvoices] = React.useState<IInvoice[]>([]);
+
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      headerName: 'id',
+      width: 60
+    },
+    {
+      field: 'amount',
+      headerName: 'Valor',
+      width: 90
+    },
+    {
+      field: 'competence',
+      headerName: 'Competência',
+      width: 90,
+    },
+    {
+      field: 'nfNumber',
+      headerName: 'NF',
+      width: 150,
+    },
+    {
+      field: 'company',
+      headerName: 'Empresa',
+      valueGetter: (params: GridValueGetterParams) =>
+        `${params.row.company.name}`,
+      width: 150,
+    },
+    {
+      field: 'description',
+      headerName: 'Descrição',
+      width: 150
+    },
+    {
+      field: 'receiptDate',
+      headerName: 'Dt Recebimento',
+      valueGetter: (params: GridValueGetterParams) =>
+        format(parseISO(String(params.row.receiptDate)), 'dd/MM/yyyy', {
+          locale: ptBR,
+        }),
+      width: 100
+    },
+    {
+      field: 'created_at',
+      headerName: 'Dt Cadastro',
+      valueGetter: (params: GridValueGetterParams) =>
+        format(parseISO(String(params.row.created_at)), 'dd/MM/yyyy HH:mm', {
+          locale: ptBR,
+        }),
+      width: 150
+    },
+    {
+      field: 'edit',
+      headerName: 'Editar',
+      width: 70,
+      sortable: false,
+      filterable: false,
+      hideable: false,
+      renderCell: (params) =>
+        <Link to={`/nf/editar/${params.row.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+          <IconButton aria-label="edit" color="primary">
+            <Edit />
+          </IconButton>
+        </Link>
+    },
+    {
+      field: 'delete',
+      headerName: 'Excluir',
+      width: 70,
+      sortable: false,
+      filterable: false,
+      hideable: false,
+      renderCell: (params) =>
+        <IconButton onClick={() => {
+          Swal.fire({
+            title: "Excluir",
+            text: "Deseja realmente excluir a NF?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sim, excluir!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              deleteInvoice(params.row.id)
+            }
+          })
+
+        }} aria-label="delete" color="error">
+          <Delete />
+        </IconButton>
+    },
+  ];
+
+  async function deleteInvoice(id: number) {
+    backendApi.delete(`invoices/${id}`)
+      .then(({ data }) => {
+        setInvoices(invoices?.filter(inv => inv.id !== id))
+        Swal.fire(
+          'Excluido!',
+          'NF excluida com sucesso.',
+          'success'
+        )
+      })
+      .catch(() => {
+        Swal.fire(
+          'Ops...',
+          'Ocorreu um erro ao excluir a NF.',
+          'error'
+        )
+      })
+  }
+
+  React.useEffect(() => {
+    if (onlyMonth)
+      backendApi.get(`invoices?competence=${DateFunctions.getCompetence(new Date())}`)
+        .then(({ data }) => {
+          setInvoices(data)
+        })
+        .catch(() => {
+          Swal.fire(
+            'Ops!',
+            'Ocorreu um erro ao carregar Notas Fiscais, se persistir contate o suporte.',
+            'error'
+          )
+        })
+    else
+      backendApi.get(`invoices`)
+        .then(({ data }) => {
+          setInvoices(data)
+        })
+        .catch(() => {
+          Swal.fire(
+            'Ops!',
+            'Ocorreu um erro ao carregar Notas Fiscais, se persistir contate o suporte.',
+            'error'
+          )
+        })
+
+  }, [])
+
+  return (
+    <>
+      <Title>NF lançadas {onlyMonth && 'na competência atual (' + DateFunctions.getCompetence(new Date()) + ')'}</Title>
+      <DataGrid
+        columnBuffer={5}
+        rows={invoices}
+        columns={columns}
+        pageSize={10}
+        rowsPerPageOptions={[10]}
+        disableSelectionOnClick
+        density='compact'
+        localeText={br.components.MuiDataGrid.defaultProps.localeText}
+        components={{
+          Toolbar: GridToolbar,
+        }}
+      />
+      <br />
+    </>
+  );
+}
