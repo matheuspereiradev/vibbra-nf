@@ -20,7 +20,7 @@ System with the purpose of helping entrepreneurs formalized as Individual Microe
 - [x] graphs with expenses by category
 - [x] graphs with the generated NF value, month by month
 - [x] graphs with the amount of expenses month by month
-- [x] charts with simple swing
+- [x] charts with simple balance
 - [x] indicative of how much billing is still available for the issuance of Invoices
 - [x] send alerts after exceeding *x%* of annual billing threshold
 - [x] send alerts via email
