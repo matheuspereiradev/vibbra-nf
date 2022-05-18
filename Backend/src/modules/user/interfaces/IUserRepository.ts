@@ -3,8 +3,8 @@ import ICreateUserDTO from "./ICreateUserDTO";
 import IUpdateUserDTO from "./IUpdateUserDTO";
 
 export default interface IUserRepository {
-    findAll(): Promise<Array<User>>;
-    findByID(id: number): Promise<User>;
+    findAll(idCompany:number): Promise<Array<User>>;
+    findByID(id: number,idCompany:number): Promise<User>;
     findByEmail(email: string): Promise<User>;
     findOwner(idCompany: number): Promise<User>;
     create(data: ICreateUserDTO): Promise<User>;

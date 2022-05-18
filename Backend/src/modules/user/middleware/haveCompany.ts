@@ -7,10 +7,10 @@ import { UserRepository } from '../models/repositories/User.repository';
  */
 
 const haveCompany = async (request: Request, response: Response, next: NextFunction): Promise<void> => {
-    const userID = request.user.id;
+    const email = request.user.email;
 
     const userRepository = new UserRepository();
-    const user = await userRepository.findByID(+userID);
+    const user = await userRepository.findByEmail(email);
 
     if(!user.idCompany)
         throw new AppError('User not have a company')
@@ -18,8 +18,6 @@ const haveCompany = async (request: Request, response: Response, next: NextFunct
     request.company = {
         id: +user.idCompany
     }
-
-    console.log(request.company)
 
     return next();
 

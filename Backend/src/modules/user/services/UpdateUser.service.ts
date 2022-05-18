@@ -16,13 +16,13 @@ export class UpdateUserService {
         private hashProvider: IHashProvider
     ) { }
 
-    public async execute({ id, email, name, password, surname }: IUpdateUserDTO): Promise<User> {
+    public async execute({ id, email, name, password, surname }: IUpdateUserDTO, idCompany:number): Promise<User> {
         await this.validateEmail(id, email);
-
-        if (!await this.repository.findByID(id))
+        const userFound = await this.repository.findByID(id,idCompany);
+        if (!userFound)
             throw new AppError('User not found')
 
-        const hashedPassword = await this.getHashPassword(password, id);
+        const hashedPassword = await this.getHashPassword(password, userFound.email);
         const user = await this.repository.update({
             id, email, name, password: hashedPassword, surname
         });
@@ -30,11 +30,11 @@ export class UpdateUserService {
         return user;
     }
 
-    public async getHashPassword(password: string, id: number): Promise<string> {
+    public async getHashPassword(password: string, email: string): Promise<string> {
         if (password)
             return await this.hashProvider.genarateHash(password);
         else {
-            const user = await this.repository.findByID(id);
+            const user = await this.repository.findByEmail(email);
             return user.password;
         }
 

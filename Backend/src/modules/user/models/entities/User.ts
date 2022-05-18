@@ -19,7 +19,7 @@ export class User {
     password: string;
 
     @Column({ name: "id_company" })
-    idCompany: string;
+    idCompany: number;
 
     @Column({ name: "is_owner" })
     isOwner: boolean;

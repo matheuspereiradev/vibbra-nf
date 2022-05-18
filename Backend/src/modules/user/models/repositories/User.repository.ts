@@ -18,8 +18,8 @@ class UserRepository implements IUserRepository {
         return all;
     };
 
-    public async findByID(id: number): Promise<User> {
-        const all = await this.ormRepository.findOne({ where: { id }, relations: ['company'] });
+    public async findByID(id: number, idCompany?: number): Promise<User> {
+        const all = await this.ormRepository.findOne({ where: { id, idCompany }, relations: ['company'] });
         return all;
     };
     public async findOwner(idCompany: number): Promise<User> {
@@ -27,10 +27,11 @@ class UserRepository implements IUserRepository {
         return all;
     };
 
-    public async findAll(): Promise<Array<User>> {
-        const all = await this.ormRepository.find();
+    public async findAll(idCompany: number): Promise<Array<User>> {
+        const all = await this.ormRepository.find({ where: { idCompany } });
         return all;
     }
+
     public async create(data: ICreateUserDTO): Promise<User> {
         const user = this.ormRepository.create(data);
         await this.ormRepository.save(user);

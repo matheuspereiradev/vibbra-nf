@@ -20,12 +20,12 @@ export class CreateUserService {
 
     ) { }
 
-    public async execute({ email, name, password, surname }: ICreateUserDTO): Promise<User> {
+    public async execute({ email, name, password, surname,idCompany }: ICreateUserDTO): Promise<User> {
 
         await this.validateEmail(email);
         const hashedPassword = await this.hashProvider.genarateHash(password);
         const user = await this.repository.create({
-            email, name, password: hashedPassword, surname
+            email, name, password: hashedPassword, surname, idCompany
         });
 
         return user;
