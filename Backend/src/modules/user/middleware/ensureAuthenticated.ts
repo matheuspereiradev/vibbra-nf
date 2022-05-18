@@ -6,7 +6,6 @@ import Error from '../../../shared/errors/AppError';
 interface TokenPayload {
     email: string,
     name: string,
-    permission: string,
     iat: number,
     exp: number,
     sub: string
@@ -35,7 +34,7 @@ export default function ensureAuthenticated(request: Request, response: Response
     request.user = {
         email: email,
         name: name,
-        id: sub
+        id: sub,
     }
 
     return next();

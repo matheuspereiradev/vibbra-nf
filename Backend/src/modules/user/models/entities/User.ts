@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Company } from "../../../company/models/entities/Company";
 @Entity("tb_user")
 export class User {
 
@@ -16,6 +17,13 @@ export class User {
 
     @Column()
     password: string;
+
+    @Column({ name: "id_company" })
+    idCompany: string;
+
+    @OneToOne(_type => Company, com => com.id)
+    @JoinColumn({ name: "id_company" })
+    company: Company;
 
     @CreateDateColumn()
     created_at: Date;

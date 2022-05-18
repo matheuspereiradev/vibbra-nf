@@ -1,16 +1,18 @@
+import companyView from "../../company/views/company.view";
 import { User } from "../models/entities/User";
 
 
 export default {
 	render(user: User): unknown {
 		if (user) {
-			const { id, email, name, surname } = user;
+			const { id, email, name, surname,company } = user;
 
 			return {
 				id,
 				email,
 				name,
-				surname
+				surname,
+				company: companyView.render(company)
 			};
 		}
 		return {};
