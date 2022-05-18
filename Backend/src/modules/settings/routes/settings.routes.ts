@@ -5,7 +5,7 @@ const routesSettings = Router();
 
 const settingsController = new SettingsController();
 
-routesSettings.get('/', settingsController.show);
+routesSettings.get('/', settingsController.find);
 routesSettings.put('/', settingsController.update);
 
 export { routesSettings };

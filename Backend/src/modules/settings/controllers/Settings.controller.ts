@@ -1,13 +1,14 @@
-import { Request, Response } from 'express';
+import { request, Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { SettingsRepository } from '../models/repositories/Settings.repository';
 import { UpdateSettingsService } from '../services/UpdateSettings.service';
 
 export class SettingsController {
 
-    async show(_request: Request, response: Response) {
-        const invoiceRepository = new SettingsRepository();
-        const all = await invoiceRepository.find();
+    async find(request: Request, response: Response) {
+        const company = request.company;
+        const settingsRepository = new SettingsRepository();
+        const all = await settingsRepository.find(company.id);
         return response.status(200).json(all);
     }
 

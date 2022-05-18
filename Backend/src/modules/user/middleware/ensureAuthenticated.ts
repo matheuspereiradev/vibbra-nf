@@ -34,7 +34,7 @@ export default function ensureAuthenticated(request: Request, response: Response
     request.user = {
         email: email,
         name: name,
-        id: sub,
+        id: +sub,
     }
 
     return next();

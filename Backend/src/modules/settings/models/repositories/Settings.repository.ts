@@ -12,9 +12,9 @@ export class SettingsRepository implements ISettingsRepository {
         this.ormRepository = getRepository(Settings)
     }
 
-    public async find(): Promise<Settings> {
-        const settings = await this.ormRepository.find({ take: 1 });
-        return settings[0];
+    public async find(idCompany:number): Promise<Settings> {
+        const settings = await this.ormRepository.findOne({ where:{ idCompany} });
+        return settings;
     }
 
     public async update({ emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom }: IUpdateSettingsDTO): Promise<Settings> {

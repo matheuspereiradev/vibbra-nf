@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Company } from "../../../company/models/entities/Company";
 
 @Entity("tb_settings")
 export class Settings {
@@ -17,5 +18,12 @@ export class Settings {
 
     @Column({ name: 'maximum_annual_billing_limit' })
     maximumAnnualBillingLimit: number;
+
+    @Column({ name: "id_company" })
+    idCompany: string;
+
+    @OneToOne(_type => Company, com => com.id)
+    @JoinColumn({ name: "id_company" })
+    company: Company;
 
 }
