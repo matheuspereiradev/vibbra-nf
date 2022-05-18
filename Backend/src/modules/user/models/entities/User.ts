@@ -21,6 +21,9 @@ export class User {
     @Column({ name: "id_company" })
     idCompany: string;
 
+    @Column({ name: "is_owner" })
+    isOwner: boolean;
+
     @OneToOne(_type => Company, com => com.id)
     @JoinColumn({ name: "id_company" })
     company: Company;

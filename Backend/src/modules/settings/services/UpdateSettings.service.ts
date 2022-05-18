@@ -11,10 +11,10 @@ export class UpdateSettingsService {
         private repository: ISettingsRepository
     ) { }
 
-    public async execute({ emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom }: IUpdateSettingsDTO): Promise<Settings> {
+    public async execute({ emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom,idCompany }: IUpdateSettingsDTO): Promise<Settings> {
 
         const settings = await this.repository.update({
-            emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom
+            emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom,idCompany
         });
 
         return settings;

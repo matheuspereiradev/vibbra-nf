@@ -17,9 +17,8 @@ export class SettingsRepository implements ISettingsRepository {
         return settings;
     }
 
-    public async update({ emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom }: IUpdateSettingsDTO): Promise<Settings> {
-        const result = await this.ormRepository.find({ take: 1 });
-        const settings = result[0];
+    public async update({ emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom, idCompany }: IUpdateSettingsDTO): Promise<Settings> {
+        const settings = await this.ormRepository.findOne({ where:{idCompany}});
         Object.assign(settings, { emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom });
         await this.ormRepository.save(settings);
         return settings;

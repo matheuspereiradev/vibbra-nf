@@ -6,6 +6,7 @@ import AppError from '../../../shared/errors/AppError';
 import ICompanyRepository from '../interfaces/ICompanyRepository';
 import ICreateCompanyDTO from '../interfaces/ICreateCompanyDTO';
 import { Company } from '../models/entities/Company';
+import IUserRepository from '../../user/interfaces/IUserRepository';
 
 
 @injectable()
@@ -13,16 +14,21 @@ export class CreateCompanyService {
 
     constructor(
         @inject('CompanyRepository')
-        private repository: ICompanyRepository
+        private repository: ICompanyRepository,
+
+        @inject('UserRepository')
+        private repositoryUser: IUserRepository,
     ) { }
 
-    public async execute({ cnpj, corporateName, name }: ICreateCompanyDTO): Promise<Company> {
+    public async execute({ cnpj, corporateName, name }: ICreateCompanyDTO, idUser:number): Promise<Company> {
 
         await this.validateCNPJ(cnpj);
 
         const company = await this.repository.create({
             cnpj, corporateName, name
         });
+
+        await this.repositoryUser.setOwner(idUser, company.id, true)
 
         return company;
     }

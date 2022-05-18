@@ -19,7 +19,11 @@ class UserRepository implements IUserRepository {
     };
 
     public async findByID(id: number): Promise<User> {
-        const all = await this.ormRepository.findOne({ where: { id },relations: ['company']  });
+        const all = await this.ormRepository.findOne({ where: { id }, relations: ['company'] });
+        return all;
+    };
+    public async findOwner(idCompany: number): Promise<User> {
+        const all = await this.ormRepository.findOne({ where: { idCompany, isOwner: true } });
         return all;
     };
 
@@ -35,6 +39,24 @@ class UserRepository implements IUserRepository {
     public async update({ name, surname, email, password, id }: IUpdateUserDTO): Promise<User> {
         const user = await this.ormRepository.findOne({ where: { id } });
         Object.assign(user, { name, surname, email, password });
+        await this.ormRepository.save(user);
+        return user;
+    }
+
+    public async removeCompanyFromUsers(company: number): Promise<void> {
+        await this.ormRepository
+            .createQueryBuilder()
+            .update(User)
+            .set({ idCompany: null })
+            .where("idCompany = :id", { id: company })
+            .execute()
+
+        return;
+    }
+
+    public async setOwner(id: number, idCompany: number, isOwner: boolean): Promise<User> {
+        const user = await this.ormRepository.findOne({ where: { id } });
+        Object.assign(user, { idCompany, isOwner });
         await this.ormRepository.save(user);
         return user;
     }

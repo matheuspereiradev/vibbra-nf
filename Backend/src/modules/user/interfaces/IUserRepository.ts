@@ -6,7 +6,10 @@ export default interface IUserRepository {
     findAll(): Promise<Array<User>>;
     findByID(id: number): Promise<User>;
     findByEmail(email: string): Promise<User>;
+    findOwner(idCompany: number): Promise<User>;
     create(data: ICreateUserDTO): Promise<User>;
+    setOwner(idUser: number,idCompany: number,isOwner:boolean): Promise<User>;
     update(data: IUpdateUserDTO): Promise<User>;
+    removeCompanyFromUsers(company:number): Promise<void>;
     delete(id: number): Promise<void>;
 }

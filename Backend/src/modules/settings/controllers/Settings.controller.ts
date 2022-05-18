@@ -13,9 +13,10 @@ export class SettingsController {
     }
 
     async update(request: Request, response: Response) {
+        const idCompany = request.company.id;
         const { emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom } = request.body;
         const updateService = container.resolve(UpdateSettingsService);
-        const settings = await updateService.execute({ emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom });
+        const settings = await updateService.execute({ emailBillingAlerts, maximumAnnualBillingLimit, sendEmailBillingAlerts, notifyFrom , idCompany});
         return response.status(200).json(settings);
     }
 
