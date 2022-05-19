@@ -15,6 +15,8 @@ import ISettingsRepository from '../../modules/settings/interfaces/ISettingsRepo
 import { SettingsRepository } from '../../modules/settings/models/repositories/Settings.repository';
 import ISendMail from '../providers/mail/model/ISendMail';
 import NodeMailerProvider from '../providers/mail/implementations/mailProvider';
+import IProviderRepository from '../../modules/provider/interfaces/IProviderRepository';
+import { ProviderRepository } from '../../modules/provider/models/repositories/Provider.repository';
 
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
@@ -23,4 +25,5 @@ container.registerSingleton<IInvoiceRepository>('InvoiceRepository', InvoiceRepo
 container.registerSingleton<IExpenditureRepository>('ExpenditureRepository', ExpenditureRepository);
 container.registerSingleton<IExpenditureCategoryRepository>('ExpenditureCategoryRepository', ExpenditureCategoryRepository);
 container.registerSingleton<ISettingsRepository>('SettingsRepository', SettingsRepository);
+container.registerSingleton<IProviderRepository>('ProviderRepository', ProviderRepository);
 container.registerSingleton<ISendMail>('SendMail', NodeMailerProvider);

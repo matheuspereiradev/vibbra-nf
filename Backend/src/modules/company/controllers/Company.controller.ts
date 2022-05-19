@@ -10,8 +10,8 @@ export class CompanyController {
 
     async find(request: Request, response: Response) {
         const { id } = request.company;
-        const userRepository = new CompanyRepository();
-        const company = await userRepository.findByID(+id);
+        const repository = new CompanyRepository();
+        const company = await repository.findByID(+id);
         return response.status(200).json(companyView.render(company));
     }
 
