@@ -117,7 +117,7 @@ export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
                             noWrap
                             sx={{ flexGrow: 1 }}
                         >
-                            Vibbra NF
+                            Sabre
                         </Typography>
                         <Button color="inherit" onClick={() => { logout() }}>
                             <Logout /> Sair

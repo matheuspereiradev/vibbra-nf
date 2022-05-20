@@ -5,11 +5,10 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import ProtectedPage from '../../components/ProtectedPage';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
 import { IExpenditureCategory } from '../../interfaces/categoryExpenditure.interface';
-import { ICompany } from '../../interfaces/company.interface';
+import { IProvider } from '../../interfaces/provider';
 import { DashboardLayout } from '../../layouts/default';
 import backendApi from '../../services/backend.axios';
 
@@ -17,9 +16,9 @@ interface ICreateData {
     amount: number,
     competence: string,
     description: string,
-    idCompany: number,
+    idCategory: number,
     paymentDate: string
-    idCategory: string,
+    idProvider: string,
 }
 
 function NewExpenditure() {
@@ -27,7 +26,7 @@ function NewExpenditure() {
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
     const { user } = useAuth();
     const { id } = useParams();
-    const [companies, setCompanies] = useState<ICompany[]>([]);
+    const [providers, setProviders] = useState<IProvider[]>([]);
     const [categories, setCategories] = useState<IExpenditureCategory[]>([]);
 
     const onSubmit = (data: ICreateData) => {
@@ -76,12 +75,12 @@ function NewExpenditure() {
 
     useEffect(() => {
         if (user) {
-            backendApi.get(`companies`).then(({ data }) => {
-                setCompanies(data);
+            backendApi.get(`providers`).then(({ data }) => {
+                setProviders(data);
             }).catch(() => {
                 Swal.fire(
                     'Ops!',
-                    'Ocorreu um erro ao carregar empresas, se persistir contate o suporte.',
+                    'Ocorreu um erro ao carregar fornecedores, se persistir contate o suporte.',
                     'error'
                 )
             })
@@ -100,8 +99,7 @@ function NewExpenditure() {
                     setValue("amount", data.amount)
                     setValue("competence", `${competence[1]}-${competence[0]}`)
                     setValue("description", data.description)
-                    setValue("idCategory", data.category.id)
-                    // setValue("idCompany", 4)
+                    setValue("idProvider", data.provider.id)
                     setValue("paymentDate", data.paymentDate.slice(0, 10))
                 }).catch(() => {
                     Swal.fire(
@@ -165,17 +163,17 @@ function NewExpenditure() {
                                             {...register("competence", { required: true })} />
                                     </Grid>
                                     <Grid item xs={6}>
-                                        <Typography>Empresa</Typography>
+                                        <Typography>Fornecedor</Typography>
                                         <TextField
-                                            id="company"
+                                            id="provider"
                                             select
                                             fullWidth
                                             variant="standard"
-                                            {...register("idCompany")}
+                                            {...register("idProvider")}
                                         >
-                                            {companies?.map((company) => (
-                                                <MenuItem key={company.cnpj} value={company.id}>
-                                                    {`${company.name} - ${company.cnpj}`}
+                                            {providers?.map((provider) => (
+                                                <MenuItem key={provider.id} value={provider.id}>
+                                                    {`${provider.name}`}
                                                 </MenuItem>
                                             ))}
                                         </TextField>

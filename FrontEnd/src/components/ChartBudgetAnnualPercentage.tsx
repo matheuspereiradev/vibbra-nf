@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import backendApi from '../services/backend.axios';
 import Title from './Title';
 
-export default function ChartMeiBillingPercentage() {
+export default function ChartBudgetAnnualPercentage() {
   const [yearFaturation, setYearFaturation] = React.useState(0);
   const [maximumAnnualBillingLimit, setMaximumAnnualBillingLimit] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -44,7 +44,7 @@ export default function ChartMeiBillingPercentage() {
               Disponível {(maximumAnnualBillingLimit - yearFaturation).toFixed(2)} R$
             </Typography>
             <Typography color="text.secondary" sx={{ flex: 1 }}>
-              Valor anual: <b>{maximumAnnualBillingLimit.toFixed(2)} R$</b> <br />
+              Orçamento anual: <b>{maximumAnnualBillingLimit.toFixed(2)} R$</b> <br />
               Valor emitido <b>{yearFaturation.toFixed(2)} R$</b>
             </Typography>
             <Chart

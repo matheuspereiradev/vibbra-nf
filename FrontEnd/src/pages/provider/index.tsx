@@ -1,19 +1,17 @@
-import { Add, Delete, Edit } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 import { Button, Grid, IconButton, Paper } from '@mui/material';
-import { DataGrid, GridColDef, GridToolbar, GridValueGetterParams, ptBR as br } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridToolbar, ptBR as br } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import ProtectedPage from '../../components/ProtectedPage';
+import Swal from 'sweetalert2';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
 import { IExpenditureCategory } from '../../interfaces/categoryExpenditure.interface';
-import { Mask } from '../../helpers/mask';
 import { DashboardLayout } from '../../layouts/default';
 import backendApi from '../../services/backend.axios';
-import Swal from 'sweetalert2';
 
 
-function CompanyList() {
+function ProviderList() {
 
     const { user } = useAuth();
     const columns: GridColDef[] = [
@@ -33,13 +31,6 @@ function CompanyList() {
             width: 200,
         },
         {
-            field: 'cnpj',
-            headerName: 'CNPJ',
-            valueGetter: (params: GridValueGetterParams) =>
-                Mask.setMask(params.row.cnpj, '**.***.***/****-**'),
-            width: 200,
-        },
-        {
             field: 'edit',
             headerName: 'Editar',
             width: 70,
@@ -47,7 +38,7 @@ function CompanyList() {
             filterable: false,
             hideable: false,
             renderCell: (params) =>
-                <Link to={`/empresas/editar/${params.row.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to={`/fornecedores/editar/${params.row.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <IconButton aria-label="edit" color="primary">
                         <Edit />
                     </IconButton>
@@ -72,7 +63,7 @@ function CompanyList() {
                         confirmButtonText: 'Sim, excluir!'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            deleteCompany(params.row.id)
+                            deleteProvider(params.row.id)
                         }
                     })
 
@@ -83,20 +74,20 @@ function CompanyList() {
     ];
 
 
-    async function deleteCompany(id: number) {
-        backendApi.delete(`companies/${id}`)
+    async function deleteProvider(id: number) {
+        backendApi.delete(`providers/${id}`)
             .then(({ data }) => {
                 setCompanies(companies?.filter(comp => comp.id !== id))
                 Swal.fire(
                     'Excluido!',
-                    'Empresa excluida com sucesso.',
+                    'Fornecedor excluida com sucesso.',
                     'success'
                 )
             })
             .catch(() => {
                 Swal.fire(
                     'Ops...',
-                    'Ocorreu um erro ao excluir o empresa.',
+                    'Ocorreu um erro ao excluir o fornecedor.',
                     'error'
                 )
             })
@@ -104,14 +95,14 @@ function CompanyList() {
 
     const [companies, setCompanies] = useState<IExpenditureCategory[]>([]);
     useEffect(() => {
-        backendApi.get(`companies`)
+        backendApi.get(`providers`)
             .then(({ data }) => {
                 setCompanies(data)
             })
             .catch(() => {
                 Swal.fire(
                     'Ops!',
-                    'Ocorreu um erro ao carregar empresas parceiras, se persistir contate o suporte.',
+                    'Ocorreu um erro ao carregar fornecedores, se persistir contate o suporte.',
                     'error'
                 )
             })
@@ -123,7 +114,7 @@ function CompanyList() {
                 <Grid item xs={12}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', minHeight: 500 }}>
                         <>
-                            <Title>Empresas Parceiras</Title>
+                            <Title>Fornecedores</Title>
 
                             <DataGrid
                                 columnBuffer={5}
@@ -141,8 +132,8 @@ function CompanyList() {
                             <br />
                             <Grid container>
                                 <Grid item xs={2}>
-                                    <Link to="/empresas/cadastrar" style={{ textDecoration: 'none', color: 'inherit' }}>
-                                        <Button variant="contained">Adicionar nova</Button>
+                                    <Link to="/fornecedores/cadastrar" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                        <Button variant="contained">Adicionar novo</Button>
                                     </Link>
                                 </Grid>
 
@@ -155,4 +146,4 @@ function CompanyList() {
     );
 }
 
-export default CompanyList;
+export default ProviderList;

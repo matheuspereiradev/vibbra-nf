@@ -16,11 +16,11 @@ export class GetMeiBillingPercentage {
 
     ) { }
 
-    public async execute(year?: number): Promise<IMeiBillingPercentageData> {
+    public async execute(idCompany:number, year?: number): Promise<IMeiBillingPercentageData> {
         if (!year)
             year = new Date().getFullYear();
         const [settings, yearFaturation] = await Promise.all([
-            this.settingsRepository.find(),
+            this.settingsRepository.find(idCompany),
             this.invoiceRepository.findFaturationInYear(year)
         ]);
 

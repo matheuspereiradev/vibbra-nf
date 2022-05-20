@@ -14,7 +14,7 @@ export class InvoiceController {
         let all;
         if (!competence)
             all = await invoiceRepository.findAll();
-        else
+        else 
             all = await invoiceRepository.findByCompetence(competence.toString())
         return response.status(200).json(invoiceView.renderMany(all));
     }

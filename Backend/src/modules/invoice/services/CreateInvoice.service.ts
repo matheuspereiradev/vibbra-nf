@@ -34,15 +34,15 @@ export class CreateInvoiceService {
             amount, competence, description, idCompany, nfNumber, receiptDate
         });
 
-        await this.sendAlert();
+        await this.sendAlert(idCompany);
 
         return invoice;
     }
 
-    public async sendAlert() {
+    public async sendAlert(idCompany:number) {
 
         const [settings, yearFaturation] = await Promise.all([
-            this.settingsRepository.find(),
+            this.settingsRepository.find(idCompany),
             this.repository.findFaturationInYear(new Date().getFullYear())
         ]);
         const percentage = Math.ceil((100 * yearFaturation) / settings.maximumAnnualBillingLimit);

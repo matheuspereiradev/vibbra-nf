@@ -14,49 +14,48 @@ import Swal from 'sweetalert2';
 interface ICreateData {
     name: string,
     corporateName: string
-    cnpj: string
 }
-function NewCompany() {
+function NewProvider() {
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
     const onSubmit = (data: ICreateData) => {
         if (id)
-            updateCompany(data)
+            updateProvider(data)
         else
             createNew(data)
     };
 
     async function createNew(data: any) {
-        backendApi.post(`companies`, data).then(() => {
+        backendApi.post(`providers`, data).then(() => {
             Swal.fire(
                 'Sucesso!',
-                'Empresa cadastrada com sucesso.',
+                'Fornecedor cadastrada com sucesso.',
                 'success'
             )
             navigate(-1)
         }).catch(() => {
             Swal.fire(
                 'Ops!',
-                'Ocorreu um erro ao salvar empresa, se persistir contate o suporte.',
+                'Ocorreu um erro ao salvar fornecedor, se persistir contate o suporte.',
                 'error'
             )
         })
     }
 
-    async function updateCompany(data: any) {
-        backendApi.put(`companies/${id}`, data).then(() => {
+    async function updateProvider(data: any) {
+        backendApi.put(`providers/${id}`, data).then(() => {
             Swal.fire(
                 'Sucesso!',
-                'Empresa cadastrada com sucesso.',
+                'Fornecedor cadastrada com sucesso.',
                 'success'
             )
             navigate(-1)
         }).catch(() => {
             Swal.fire(
                 'Ops!',
-                'Ocorreu um erro ao salvar empresa, se persistir contate o suporte.',
+                'Ocorreu um erro ao salvar fornecedor, se persistir contate o suporte.',
                 'error'
             )
         })
@@ -64,14 +63,13 @@ function NewCompany() {
 
     useEffect(() => {
         if (id && user)
-            backendApi.get(`companies/find/${id}`).then(({ data }) => {
-                setValue('cnpj', data.cnpj)
+            backendApi.get(`providers/find/${id}`).then(({ data }) => {
                 setValue('corporateName', data.corporateName)
                 setValue('name', data.name)
             }).catch(() => {
                 Swal.fire(
                     'Ops!',
-                    'Ocorreu um erro ao carregar empresa, se persistir contate o suporte.',
+                    'Ocorreu um erro ao carregar fornecedor, se persistir contate o suporte.',
                     'error'
                 )
             })
@@ -83,7 +81,7 @@ function NewCompany() {
                 <Grid item xs={12}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <>
-                            <Title>{id ? `Editar Empresa Parceira ${id}` : 'Cadastrar Empresa Parceira'}</Title>
+                            <Title>{id ? `Editar Fornecedor ${id}` : 'Cadastrar Fornecedor'}</Title>
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={4}>
@@ -104,16 +102,6 @@ function NewCompany() {
                                             {...register("corporateName", { required: true })}
                                         />
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography>CNPJ</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="cnpj"
-                                            variant="standard"
-                                            {...register("cnpj", { required: true })}
-                                        />
-                                    </Grid>
-
                                     <Grid item xs={12}>
                                         <Button type="submit" fullWidth variant="contained" endIcon={<Save />}>
                                             Salvar
@@ -129,4 +117,4 @@ function NewCompany() {
     );
 }
 
-export default NewCompany;
+export default NewProvider;

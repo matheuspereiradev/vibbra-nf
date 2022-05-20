@@ -64,7 +64,7 @@ function Settings() {
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={2}>
-                                        <Typography>Valor anual do MEI</Typography>
+                                        <Typography>Orçamento anual</Typography>
                                         <TextField
                                             fullWidth
                                             type="number"

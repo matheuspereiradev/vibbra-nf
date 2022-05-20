@@ -15,7 +15,7 @@ interface AuthContextData {
 export const AuthContext = createContext({} as AuthContextData)
 
 export const AuthProvider = ({ children }: ChildrenProvider) => {
-    const token_name = 'token_vibbra_nf';
+    const token_name = 'token_sabre';
     const [user, setUser] = useState<IUser>()
     const [token, setToken] = useState<string>();
     const navigate = useNavigate();
@@ -58,7 +58,7 @@ export const AuthProvider = ({ children }: ChildrenProvider) => {
     const logout = () => {
         setUser(undefined)
         setToken(undefined)
-        localStorage.removeItem("token_vibbra_nf");
+        localStorage.removeItem("token_sabre");
         navigate('/entrar');
     }
 

@@ -74,12 +74,12 @@ export const secondaryListItems = (
         <ListItemText primary="Cat. de despesas" />
       </ListItemButton>
     </Link>
-    <Link to="/empresas" style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link to="/fornecedores" style={{ textDecoration: 'none', color: 'inherit' }}>
       <ListItemButton>
         <ListItemIcon>
           <Business />
         </ListItemIcon>
-        <ListItemText primary="Empresas Parceiras" />
+        <ListItemText primary="Fornecedores" />
       </ListItemButton>
     </Link>
   </>

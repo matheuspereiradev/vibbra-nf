@@ -2,7 +2,7 @@ import { Button, Grid, Paper, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import AnnualBalance from '../../components/AnnualBalance';
 import ChartExpenditureByCategory from '../../components/ChartExpenditureByCategory';
-import ChartMeiBillingPercentage from '../../components/ChartMeiBillingPercentage';
+import ChartBudgetAnnualPercentage from '../../components/ChartBudgetAnnualPercentage';
 import ExpendituresList from '../../components/ExpendituresList';
 import InvoicesList from '../../components/InvoicesList';
 import { useAuth } from '../../hooks/AuthContext';
@@ -96,7 +96,7 @@ function Landing() {
                             flexDirection: 'column',
                         }}
                     >
-                        <ChartMeiBillingPercentage />
+                        <ChartBudgetAnnualPercentage />
                     </Paper>
                 </Grid>
             </DashboardLayout>

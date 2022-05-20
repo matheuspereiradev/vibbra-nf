@@ -1,7 +1,5 @@
 import { Route, Routes as Router } from 'react-router-dom';
 import BalanceDashboard from '../pages/balance';
-import CompanyList from '../pages/company';
-import NewCompany from '../pages/company/newCompany';
 import ExpenditureCategoryList from '../pages/expenditureCategory';
 import NewCategoryExpenditure from '../pages/expenditureCategory/newCategoryExpenditure';
 import ExpendituresListAll from '../pages/expenditures';
@@ -10,6 +8,8 @@ import InvoicesListAll from '../pages/invoices';
 import NewInvoice from '../pages/invoices/newInvoice';
 import Landing from '../pages/landing';
 import Login from '../pages/login';
+import ProviderList from '../pages/provider';
+import NewProvider from '../pages/provider/newProvider';
 import Settings from '../pages/settings';
 import UserList from '../pages/users';
 import NewUser from '../pages/users/newUser';
@@ -32,9 +32,9 @@ function Routes() {
             <Route path="/categoriasdedespesa/cadastrar" element={<NewCategoryExpenditure />} />
             <Route path="/categoriasdedespesa/editar/:id" element={<NewCategoryExpenditure />} />
             <Route path="/balanco" element={<BalanceDashboard />} />
-            <Route path="/empresas" element={<CompanyList />} />
-            <Route path="/empresas/cadastrar" element={<NewCompany />} />
-            <Route path="/empresas/editar/:id" element={<NewCompany />} />
+            <Route path="/fornecedores" element={<ProviderList />} />
+            <Route path="/fornecedores/cadastrar" element={<NewProvider />} />
+            <Route path="/fornecedores/editar/:id" element={<NewProvider />} />
             <Route path="/entrar" element={<Login />} />
         </Router>
 

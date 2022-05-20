@@ -34,10 +34,10 @@ export default function ExpendituresList({ onlyMonth }: Props) {
       width: 90,
     },
     {
-      field: 'company',
-      headerName: 'Empresa',
+      field: 'provider',
+      headerName: 'Fornecedor',
       valueGetter: (params: GridValueGetterParams) =>
-        `${params.row.company.name}`,
+        `${params.row.provider.name}`,
       width: 150,
     },
     {

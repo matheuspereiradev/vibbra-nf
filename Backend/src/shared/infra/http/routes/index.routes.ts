@@ -19,7 +19,7 @@ routes.use('/companies', ensureAuthenticated, routesCompany);
 routes.use('/invoices', ensureAuthenticated, routesInvoice);
 routes.use('/expenditures', ensureAuthenticated, haveCompany, routesExpenditure);
 routes.use('/settings', ensureAuthenticated, haveCompany, routesSettings);
-routes.use('/provider', ensureAuthenticated, haveCompany, routesProvider);
+routes.use('/providers', ensureAuthenticated, haveCompany, routesProvider);
 routes.use('/reports', ensureAuthenticated, haveCompany, routesReports);
 
 export { routes };
