@@ -4,6 +4,6 @@ export default interface IUpdateExpenditureDTO {
     description: string
     competence: string
     paymentDate: Date
-    idCompany: number
     idCategory: number
+    idProvider: number
 }

@@ -17,12 +17,12 @@ export class CreateExpenditureService {
 
     ) { }
 
-    public async execute({ amount, competence, description, idCompany, idCategory, paymentDate }: ICreateExpenditureDTO): Promise<Expenditure> {
+    public async execute({ amount, competence, description, idCompany, idProvider, idCategory, paymentDate }: ICreateExpenditureDTO): Promise<Expenditure> {
 
         await this.validateCompany(idCompany);
 
         const expenditure = await this.repository.create({
-            amount, competence, description, idCompany, idCategory, paymentDate
+            amount, competence, description, idCompany, idCategory, paymentDate, idProvider
         });
 
         return expenditure;

@@ -4,5 +4,6 @@ export default interface ICreateExpenditureDTO {
     competence: string
     paymentDate: Date
     idCompany: number
-    idCategory: number
+    idCategory: number,
+    idProvider:number
 }

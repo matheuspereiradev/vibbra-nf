@@ -5,7 +5,7 @@ import expenditureCategoryView from "./expenditureCategory.view";
 export default {
 	render(expenditure: Expenditure): unknown {
 		if (expenditure) {
-			const { id, amount, category, company, competence, created_at, description, idCategory, idCompany, paymentDate } = expenditure;
+			const { id, amount, category,provider,idProvider, company, competence, created_at, description, idCategory, idCompany, paymentDate } = expenditure;
 
 			return {
 				id,
@@ -17,7 +17,9 @@ export default {
 				category: expenditureCategoryView.render(category),
 				paymentDate,
 				idCategory,
-				idCompany
+				idCompany,
+				provider,
+				idProvider
 			};
 		}
 		return {};

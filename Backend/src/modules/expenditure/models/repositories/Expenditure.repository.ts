@@ -15,12 +15,12 @@ export class ExpenditureRepository implements IExpenditureRepository {
         this.ormRepository = getRepository(Expenditure)
     }
 
-    public async findByCompetence(competence: string): Promise<Expenditure[]> {
-        const all = await this.ormRepository.find({ relations: ['company', 'category'], where: { competence } });
+    public async findByCompetence(idCompany: number, competence: string): Promise<Expenditure[]> {
+        const all = await this.ormRepository.find({ relations: ['company', 'category', 'provider'], where: { idCompany, competence } });
         return all;
     }
-    public async findByCompetenceYear(competenceYear: string): Promise<Expenditure[]> {
-        const all = await this.ormRepository.find({ relations: ['company', 'category'], where: { competence: ILike(`%/${competenceYear}`) } });
+    public async findByCompetenceYear(idCompany: number, competenceYear: string): Promise<Expenditure[]> {
+        const all = await this.ormRepository.find({ relations: ['company', 'category', 'provider'], where: { idCompany, competence: ILike(`%/${competenceYear}`) } });
         return all;
     }
 
@@ -78,13 +78,13 @@ export class ExpenditureRepository implements IExpenditureRepository {
         return sum || 0;
     }
 
-    public async findByID(id: number): Promise<Expenditure> {
-        const all = await this.ormRepository.findOne({ relations: ['company', 'category'], where: { id } });
+    public async findByID(idCompany: number, id: number): Promise<Expenditure> {
+        const all = await this.ormRepository.findOne({ relations: ['company', 'category', 'provider'], where: { id, idCompany } });
         return all;
     };
 
-    public async findAll(): Promise<Array<Expenditure>> {
-        const all = await this.ormRepository.find({ relations: ['company', 'category'] });
+    public async findAll(idCompany: number): Promise<Array<Expenditure>> {
+        const all = await this.ormRepository.find({ where: { idCompany }, relations: ['company', 'category', 'provider'] });
         return all;
     }
 
@@ -93,9 +93,9 @@ export class ExpenditureRepository implements IExpenditureRepository {
         await this.ormRepository.save(expenditure);
         return expenditure;
     }
-    public async update({ amount, competence, description, idCompany, idCategory, paymentDate, id }: IUpdateExpenditureDTO): Promise<Expenditure> {
+    public async update({ amount, competence, description, idCategory, idProvider, paymentDate, id }: IUpdateExpenditureDTO): Promise<Expenditure> {
         const expenditure = await this.ormRepository.findOne({ where: { id } });
-        Object.assign(expenditure, { amount, competence, description, idCompany, paymentDate });
+        Object.assign(expenditure, { amount, competence, description, idCategory, idProvider, paymentDate });
         await this.ormRepository.save(expenditure);
         return expenditure;
     }

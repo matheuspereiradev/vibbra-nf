@@ -17,9 +17,9 @@ routes.use('/users', ensureAuthenticated, routesUser);
 routes.use('/auth', routesSession);
 routes.use('/companies', ensureAuthenticated, routesCompany);
 routes.use('/invoices', ensureAuthenticated, routesInvoice);
-routes.use('/expenditures', ensureAuthenticated, routesExpenditure);
-routes.use('/settings', ensureAuthenticated, haveCompany ,routesSettings);
-routes.use('/provider', ensureAuthenticated, haveCompany ,routesProvider);
-routes.use('/reports', ensureAuthenticated, routesReports);
+routes.use('/expenditures', ensureAuthenticated, haveCompany, routesExpenditure);
+routes.use('/settings', ensureAuthenticated, haveCompany, routesSettings);
+routes.use('/provider', ensureAuthenticated, haveCompany, routesProvider);
+routes.use('/reports', ensureAuthenticated, haveCompany, routesReports);
 
 export { routes };

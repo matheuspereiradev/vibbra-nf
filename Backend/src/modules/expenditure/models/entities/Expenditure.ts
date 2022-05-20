@@ -1,5 +1,6 @@
 import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Company } from "../../../company/models/entities/Company";
+import { Provider } from "../../../provider/models/entities/Provider";
 import { ExpenditureCategory } from "./ExpenditureCategory";
 
 @Entity("tb_expenditure")
@@ -33,6 +34,13 @@ export class Expenditure {
     @OneToOne(_type => ExpenditureCategory, cat => cat.id)
     @JoinColumn({ name: "id_category" })
     category: ExpenditureCategory;
+
+    @Column({ name: "id_provider" })
+    idProvider: number;
+
+    @OneToOne(_type => Provider, pro => pro.id)
+    @JoinColumn({ name: "id_provider" })
+    provider: Provider;
 
     @CreateDateColumn()
     created_at: Date;

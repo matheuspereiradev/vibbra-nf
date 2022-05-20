@@ -12,29 +12,20 @@ export class UpdateExpenditureService {
     constructor(
         @inject('ExpenditureRepository')
         private repository: IExpenditureRepository,
-
-        @inject('CompanyRepository')
-        private companyRepository: ICompanyRepository
-
     ) { }
 
-    public async execute({ id, amount, competence, description, idCompany, idCategory, paymentDate }: IUpdateExpenditureDTO): Promise<Expenditure> {
+    public async execute({ id, amount, competence, description, idProvider, idCategory, paymentDate }: IUpdateExpenditureDTO,idCompany:number): Promise<Expenditure> {
 
-        await this.validateCompany(idCompany);
+        const expediture = await this.repository.findByID(idCompany,id);
+
+        if(!expediture)
+            throw new AppError('Expenditure not found')
 
         const expenditure = await this.repository.update({
-            id, amount, competence, description, idCompany, idCategory, paymentDate
+            id, amount, competence, description, idProvider, idCategory, paymentDate
         });
 
         return expenditure;
-    }
-
-    public async validateCompany(idCompany: number): Promise<void> {
-        const company = await this.companyRepository.findByID(idCompany);
-
-        if (!company) {
-            throw new AppError('Company not found', 400);
-        }
     }
 
 };

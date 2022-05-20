@@ -11,8 +11,9 @@ export class ReportsController {
 
     async meiBillingPercentage(request: Request, response: Response) {
         const { year } = request.query;
+        const idCompany = request.company.id;
         const service = container.resolve(GetMeiBillingPercentage);
-        const result = await service.execute(+year);
+        const result = await service.execute(idCompany,+year);
         return response.status(200).json(result);
     };
 
