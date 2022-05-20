@@ -1,4 +1,5 @@
 export default interface ICreateExpenditureCategoryDTO {
     name: string,
-    description: string
+    description: string,
+    idCompany: number
 }

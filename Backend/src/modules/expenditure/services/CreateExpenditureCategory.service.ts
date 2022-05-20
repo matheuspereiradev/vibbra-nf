@@ -11,10 +11,10 @@ export class CreateExpenditureCategoryService {
         private repository: IExpenditureCategoryRepository,
     ) { }
 
-    public async execute({ name, description }: ICreateExpenditureCategoryDTO): Promise<ExpenditureCategory> {
+    public async execute({ name, description, idCompany }: ICreateExpenditureCategoryDTO): Promise<ExpenditureCategory> {
 
         const expenditureCategory = await this.repository.create({
-            name, description
+            name, description, idCompany
         });
 
         return expenditureCategory;

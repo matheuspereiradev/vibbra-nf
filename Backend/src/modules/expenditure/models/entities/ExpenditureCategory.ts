@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Company } from "../../../company/models/entities/Company";
 
 @Entity("tb_expenditure_category")
 export class ExpenditureCategory {
@@ -11,6 +12,13 @@ export class ExpenditureCategory {
 
     @Column()
     description: string;
+
+    @Column({ name: "id_company" })
+    idCompany: number;
+
+    @OneToOne(_type => Company, comp => comp.id)
+    @JoinColumn({ name: "id_company" })
+    company: Company;
 
     @CreateDateColumn()
     created_at: Date;

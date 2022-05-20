@@ -14,13 +14,13 @@ export class ExpenditureCategoryRepository implements IExpenditureCategoryReposi
     }
 
 
-    public async findByID(id: number): Promise<ExpenditureCategory> {
-        const all = await this.ormRepository.findOne({ where: { id } });
+    public async findByID(idCompany: number, id: number): Promise<ExpenditureCategory> {
+        const all = await this.ormRepository.findOne({ where: { id, idCompany } });
         return all;
     };
 
-    public async findAll(): Promise<Array<ExpenditureCategory>> {
-        const all = await this.ormRepository.find();
+    public async findAll(idCompany: number): Promise<Array<ExpenditureCategory>> {
+        const all = await this.ormRepository.find({ where: { idCompany } });
         return all;
     }
 
