@@ -17,6 +17,8 @@ import ISendMail from '../providers/mail/model/ISendMail';
 import NodeMailerProvider from '../providers/mail/implementations/mailProvider';
 import IProviderRepository from '../../modules/provider/interfaces/IProviderRepository';
 import { ProviderRepository } from '../../modules/provider/models/repositories/Provider.repository';
+import IProductRepository from '../../modules/product/interfaces/IProductRepository';
+import { ProductRepository } from '../../modules/product/models/repositories/Product.repository';
 
 container.registerSingleton<IHashProvider>('HashProvider', BCryptHashProvider);
 container.registerSingleton<IUserRepository>('UserRepository', UserRepository);
@@ -26,4 +28,5 @@ container.registerSingleton<IExpenditureRepository>('ExpenditureRepository', Exp
 container.registerSingleton<IExpenditureCategoryRepository>('ExpenditureCategoryRepository', ExpenditureCategoryRepository);
 container.registerSingleton<ISettingsRepository>('SettingsRepository', SettingsRepository);
 container.registerSingleton<IProviderRepository>('ProviderRepository', ProviderRepository);
+container.registerSingleton<IProductRepository>('ProductRepository', ProductRepository);
 container.registerSingleton<ISendMail>('SendMail', NodeMailerProvider);

@@ -14,7 +14,7 @@ function Landing() {
         <div className="App">
             <DashboardLayout titleKey='Teste'>
                 <Grid item xs={12} md={12} lg={12}>
-                    <Typography>Seja bem vindo {user?.name}</Typography>
+                    <Typography>Seja bem vindo {user?.name} {user?.company.name}</Typography>
                 </Grid>
                 <Grid item xs={12} md={12} lg={12}>
                     <Paper

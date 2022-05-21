@@ -17,7 +17,7 @@ import NewUser from '../pages/users/newUser';
 function Routes() {
     return (
         <Router>
-            <Route path="/" element={<Landing />} />
+            <Route path="/home" element={<Landing />} />
             <Route path="/usuarios" element={<UserList />} />
             <Route path="/usuarios/cadastrar" element={<NewUser />} />
             <Route path="/usuarios/editar/:id" element={<NewUser />} />

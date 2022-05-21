@@ -10,7 +10,7 @@ import { Link } from 'react-router-dom';
 
 export const mainListItems = (
   <>
-    <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link to="/home" style={{ textDecoration: 'none', color: 'inherit' }}>
       <ListItemButton>
         <ListItemIcon>
           <DashboardIcon />
@@ -42,18 +42,10 @@ export const mainListItems = (
         <ListItemText primary="Despesas" />
       </ListItemButton>
     </Link>
-    <Link to="/usuarios" style={{ textDecoration: 'none', color: 'inherit' }}>
-      <ListItemButton>
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary="Usuários" />
-      </ListItemButton>
-    </Link>
   </>
 );
 
-export const secondaryListItems = (
+export const configListItems = (
   <>
     <Link to="/configuracoes" style={{ textDecoration: 'none', color: 'inherit' }}>
       <ListSubheader component="div" inset>
@@ -66,6 +58,13 @@ export const secondaryListItems = (
         <ListItemText primary="Configurações" />
       </ListItemButton>
     </Link>
+  </>
+);
+export const basicListItems = (
+  <>
+    <ListSubheader component="div" inset>
+      Cadastros Básicos
+    </ListSubheader>
     <Link to="/categoriasdedespesa" style={{ textDecoration: 'none', color: 'inherit' }}>
       <ListItemButton>
         <ListItemIcon>
@@ -80,6 +79,14 @@ export const secondaryListItems = (
           <Business />
         </ListItemIcon>
         <ListItemText primary="Fornecedores" />
+      </ListItemButton>
+    </Link>
+    <Link to="/usuarios" style={{ textDecoration: 'none', color: 'inherit' }}>
+      <ListItemButton>
+        <ListItemIcon>
+          <PeopleIcon />
+        </ListItemIcon>
+        <ListItemText primary="Usuários" />
       </ListItemButton>
     </Link>
   </>

@@ -18,7 +18,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mainListItems, secondaryListItems } from '../components/ListItems/index';
+import { mainListItems, basicListItems, configListItems } from '../components/ListItems/index';
 import ProtectedPage from '../components/ProtectedPage';
 import { useAuth } from '../hooks/AuthContext';
 const drawerWidth: number = 240;
@@ -141,7 +141,9 @@ export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
                     <List component="nav">
                         {mainListItems}
                         <Divider sx={{ my: 1 }} />
-                        {secondaryListItems}
+                        {basicListItems}
+                        <Divider sx={{ my: 1 }} />
+                        {configListItems}
                     </List>
                 </Drawer>
                 <Box

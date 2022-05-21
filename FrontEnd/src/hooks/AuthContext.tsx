@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }: ChildrenProvider) => {
             setToken(data.token)
             backendApi.defaults.headers.common['authorization'] = `Bearer ${data.token}`;
             localStorage.setItem(token_name, data.token);
-            navigate('/')
+            navigate('/home')
         }).catch(() => {
             Swal.fire(
                 'Ops!',

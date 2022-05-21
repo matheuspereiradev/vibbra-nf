@@ -2,6 +2,7 @@ import { Router, Request, Response } from 'express';
 import { routesCompany } from '../../../../modules/company/routes/company.routes';
 import { routesExpenditure } from '../../../../modules/expenditure/routes/expenditure.routes';
 import { routesInvoice } from '../../../../modules/invoice/routes/invoice.routes';
+import { routesProduct } from '../../../../modules/product/routes/product.routes';
 import { routesProvider } from '../../../../modules/provider/routes/provider.routes';
 import { routesReports } from '../../../../modules/reports/routes/reports.routes';
 import { routesSettings } from '../../../../modules/settings/routes/settings.routes';
@@ -20,6 +21,7 @@ routes.use('/invoices', ensureAuthenticated, routesInvoice);
 routes.use('/expenditures', ensureAuthenticated, haveCompany, routesExpenditure);
 routes.use('/settings', ensureAuthenticated, haveCompany, routesSettings);
 routes.use('/providers', ensureAuthenticated, haveCompany, routesProvider);
+routes.use('/products', ensureAuthenticated, haveCompany, routesProduct);
 routes.use('/reports', ensureAuthenticated, haveCompany, routesReports);
 
 export { routes };

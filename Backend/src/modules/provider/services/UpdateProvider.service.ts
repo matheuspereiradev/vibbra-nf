@@ -18,11 +18,11 @@ export class UpdateProviderService {
         if (!await this.repository.findByID(id,idCompany))
             throw new AppError('Provider not found')
 
-        const company = await this.repository.update({
+        const provider = await this.repository.update({
             id, corporateName, name,idCompany
         });
 
-        return company;
+        return provider;
     }
 
 }

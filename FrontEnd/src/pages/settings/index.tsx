@@ -59,7 +59,7 @@ function Settings() {
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <>
                             <Title>Configurações</Title>
-                            <Typography style={{ fontWeight: 'bold' }}>Configurações de notificação e limites</Typography>
+                            <Typography style={{ fontWeight: 'bold' }}>Configurações orçamento</Typography>
                             <br />
                             <form onSubmit={handleSubmit(onSubmit)}>
                                 <Grid container spacing={2}>
