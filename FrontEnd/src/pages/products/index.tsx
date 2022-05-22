@@ -5,15 +5,13 @@ import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Title from '../../components/Title';
-import { useAuth } from '../../hooks/AuthContext';
-import { IExpenditureCategory } from '../../interfaces/categoryExpenditure.interface';
+import { IProducts } from '../../interfaces/products.interface';
 import { DashboardLayout } from '../../layouts/default';
 import backendApi from '../../services/backend.axios';
 
 
-function ProviderList() {
+function ProductList() {
 
-    const { user } = useAuth();
     const columns: GridColDef[] = [
         {
             field: 'id',
@@ -26,9 +24,26 @@ function ProviderList() {
             width: 200
         },
         {
-            field: 'corporateName',
-            headerName: 'Nome Empresarial',
+            field: 'brandProduct',
+            headerName: 'Marca',
             width: 200,
+        },
+        {
+            field: 'purchasePrice',
+            headerName: 'Vl. de compra',
+            type: 'number',
+            width: 110,
+        },
+        {
+            field: 'salePrice',
+            headerName: 'Vl. de venda',
+            type: 'number',
+            width: 110,
+        },
+        {
+            field: 'barcode',
+            headerName: 'Cd de Barras',
+            width: 180,
         },
         {
             field: 'edit',
@@ -38,7 +53,7 @@ function ProviderList() {
             filterable: false,
             hideable: false,
             renderCell: (params) =>
-                <Link to={`/fornecedores/editar/${params.row.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                <Link to={`/produtos/editar/${params.row.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
                     <IconButton aria-label="edit" color="primary">
                         <Edit />
                     </IconButton>
@@ -55,7 +70,7 @@ function ProviderList() {
                 <IconButton onClick={() => {
                     Swal.fire({
                         title: "Excluir",
-                        text: "Deseja realmente excluir o froneedor?",
+                        text: "Deseja realmente excluir o produto?",
                         icon: 'warning',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -64,7 +79,7 @@ function ProviderList() {
                         cancelButtonText: 'Cancelar'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            deleteProvider(params.row.id)
+                            deleteProduct(params.row.id)
                         }
                     })
 
@@ -75,35 +90,35 @@ function ProviderList() {
     ];
 
 
-    async function deleteProvider(id: number) {
-        backendApi.delete(`providers/${id}`)
+    async function deleteProduct(id: number) {
+        backendApi.delete(`products/${id}`)
             .then(({ data }) => {
-                setProviders(providers?.filter(comp => comp.id !== id))
+                setProducts(products?.filter(comp => comp.id !== id))
                 Swal.fire(
                     'Excluido!',
-                    'Fornecedor excluida com sucesso.',
+                    'Produto excluido com sucesso.',
                     'success'
                 )
             })
             .catch(() => {
                 Swal.fire(
                     'Ops...',
-                    'Ocorreu um erro ao excluir o fornecedor.',
+                    'Ocorreu um erro ao excluir o produto.',
                     'error'
                 )
             })
     }
 
-    const [providers, setProviders] = useState<IExpenditureCategory[]>([]);
+    const [products, setProducts] = useState<IProducts[]>([]);
     useEffect(() => {
-        backendApi.get(`providers`)
+        backendApi.get(`products`)
             .then(({ data }) => {
-                setProviders(data)
+                setProducts(data)
             })
             .catch(() => {
                 Swal.fire(
                     'Ops!',
-                    'Ocorreu um erro ao carregar fornecedores, se persistir contate o suporte.',
+                    'Ocorreu um erro ao carregar produtos, se persistir contate o suporte.',
                     'error'
                 )
             })
@@ -115,14 +130,14 @@ function ProviderList() {
                 <Grid item xs={12}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', minHeight: 500 }}>
                         <>
-                            <Title>Fornecedores</Title>
+                            <Title>Produtos</Title>
 
                             <DataGrid
                                 columnBuffer={5}
-                                rows={providers}
+                                rows={products}
                                 columns={columns}
-                                pageSize={10}
-                                rowsPerPageOptions={[10]}
+                                pageSize={20}
+                                rowsPerPageOptions={[20]}
                                 disableSelectionOnClick
                                 density='compact'
                                 localeText={br.components.MuiDataGrid.defaultProps.localeText}
@@ -133,7 +148,7 @@ function ProviderList() {
                             <br />
                             <Grid container>
                                 <Grid item xs={2}>
-                                    <Link to="/fornecedores/cadastrar" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                    <Link to="/produtos/cadastrar" style={{ textDecoration: 'none', color: 'inherit' }}>
                                         <Button variant="contained">Adicionar novo</Button>
                                     </Link>
                                 </Grid>
@@ -147,4 +162,4 @@ function ProviderList() {
     );
 }
 
-export default ProviderList;
+export default ProductList;

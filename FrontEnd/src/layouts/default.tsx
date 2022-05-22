@@ -1,10 +1,8 @@
-import { AccountCircle, ArrowBack, ArrowDropDown, Logout } from '@mui/icons-material';
+import { AccountCircle, ArrowBack, Logout } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
-import { Button } from '@mui/material';
+import { Button, Menu, MenuItem } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
-import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,13 +10,12 @@ import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
 import { createTheme, styled, ThemeProvider } from '@mui/material/styles';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { mainListItems, basicListItems, configListItems } from '../components/ListItems/index';
+import { MenuOptions } from '../components/ListItems';
 import ProtectedPage from '../components/ProtectedPage';
 import { useAuth } from '../hooks/AuthContext';
 const drawerWidth: number = 240;
@@ -81,6 +78,14 @@ interface Props {
 export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
     const [open, setOpen] = useState(true);
     const { user, logout } = useAuth();
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
     const toggleDrawer = () => {
         setOpen(!open);
     };
@@ -119,12 +124,42 @@ export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
                         >
                             Sabre
                         </Typography>
-                        <Button color="inherit" onClick={() => { logout() }}>
-                            <Logout /> Sair
-                        </Button>
+                        <div>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle />
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                <MenuItem>Profile</MenuItem>
+                                <MenuItem>My account</MenuItem>
+                            </Menu>
+                        </div>
                     </Toolbar>
                 </AppBar>
-                <Drawer variant="permanent" open={open}>
+                <Drawer
+                    variant="permanent"
+                    open={open}
+                >
                     <Toolbar
                         sx={{
                             display: 'flex',
@@ -137,14 +172,8 @@ export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
                             <ChevronLeftIcon />
                         </IconButton>
                     </Toolbar>
-                    <Divider />
-                    <List component="nav">
-                        {mainListItems}
-                        <Divider sx={{ my: 1 }} />
-                        {basicListItems}
-                        <Divider sx={{ my: 1 }} />
-                        {configListItems}
-                    </List>
+
+                    <MenuOptions />
                 </Drawer>
                 <Box
                     component="main"

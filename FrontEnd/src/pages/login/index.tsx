@@ -45,7 +45,7 @@ export default function Login() {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: 'url(https://img.freepik.com/vetores-gratis/ilustracao-de-conceito-on-line-de-seguranca-de-dados-ciberneticos-seguranca-de-internet-ou-privacidade-e-protecao-de-informacoes_1150-37328.jpg?t=st=1651700803~exp=1651701403~hmac=de18413510502cd48e2e02c144b403298c7c3dc84ac157394218b0bdb7c42a9a&w=740)',
+                        backgroundImage: 'url(/login.jpg)',
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],

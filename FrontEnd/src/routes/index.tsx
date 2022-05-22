@@ -8,6 +8,8 @@ import InvoicesListAll from '../pages/invoices';
 import NewInvoice from '../pages/invoices/newInvoice';
 import Landing from '../pages/landing';
 import Login from '../pages/login';
+import ProductList from '../pages/products';
+import NewProduct from '../pages/products/newProduct';
 import ProviderList from '../pages/provider';
 import NewProvider from '../pages/provider/newProvider';
 import Settings from '../pages/settings';
@@ -35,6 +37,9 @@ function Routes() {
             <Route path="/fornecedores" element={<ProviderList />} />
             <Route path="/fornecedores/cadastrar" element={<NewProvider />} />
             <Route path="/fornecedores/editar/:id" element={<NewProvider />} />
+            <Route path="/produtos" element={<ProductList />} />
+            <Route path="/produtos/cadastrar" element={<NewProduct />} />
+            <Route path="/produtos/editar/:id" element={<NewProduct />} />
             <Route path="/entrar" element={<Login />} />
         </Router>
 
