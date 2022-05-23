@@ -1,35 +1,74 @@
-import { Button, Grid, Paper } from '@mui/material';
-import { Link } from 'react-router-dom';
-import ExpendituresList from '../../components/ExpendituresList';
+import { GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { format, parseISO } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { DashboardLayout } from '../../layouts/default';
+import BasicListComponent from '../../sections/BasicListComponent';
 
-function ExpendituresListAll() {
+export const expenditureColumns: GridColDef[] = [
+    {
+        field: 'amount',
+        headerName: 'Valor',
+        width: 90
+    },
+    {
+        field: 'competence',
+        headerName: 'Competência',
+        width: 90,
+    },
+    {
+        field: 'provider',
+        headerName: 'Fornecedor',
+        valueGetter: (params: GridValueGetterParams) =>
+            `${params.row.provider.name}`,
+        width: 150,
+    },
+    {
+        field: 'category',
+        headerName: 'Categoria',
+        valueGetter: (params: GridValueGetterParams) =>
+            `${params.row.category.name}`,
+        width: 150,
+    },
+    {
+        field: 'description',
+        headerName: 'Descrição',
+        width: 150
+    },
+    {
+        field: 'paymentDate',
+        headerName: 'Dt Pagamento',
+        valueGetter: (params: GridValueGetterParams) =>
+            format(parseISO(String(params.row.paymentDate)), 'dd/MM/yyyy', {
+                locale: ptBR,
+            }),
+        width: 100
+    },
+    {
+        field: 'created_at',
+        headerName: 'Dt Cadastro',
+        valueGetter: (params: GridValueGetterParams) =>
+            format(parseISO(String(params.row.created_at)), 'dd/MM/yyyy HH:mm', {
+                locale: ptBR,
+            }),
+        width: 150
+    },
+];
+
+function ExpendituresList() {
 
     return (
         <div className="App">
             <DashboardLayout titleKey='Teste'>
-                <Grid item xs={12} md={12} lg={12}>
-                    <Paper
-                        sx={{
-                            p: 2,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            minHeight: 500,
-                        }}
-                    >
-                        <ExpendituresList onlyMonth={false} />
-                        <Grid container>
-                            <Grid item xs={2}>
-                                <Link to="/despesas/cadastrar" style={{ textDecoration: 'none', color: 'inherit' }}>
-                                    <Button fullWidth variant="contained">Lançar nova</Button>
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </Paper>
-                </Grid>
+                <BasicListComponent
+                    label='Despesas'
+                    backendRoute='expenditures'
+                    frontendRoute='despesas'
+                    gridColumns={expenditureColumns}
+                />
+
             </DashboardLayout>
         </div>
     );
 }
 
-export default ExpendituresListAll;
+export default ExpendituresList;

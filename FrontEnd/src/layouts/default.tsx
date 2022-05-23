@@ -1,12 +1,11 @@
-import { AccountCircle, ArrowBack, Logout } from '@mui/icons-material';
+import { ArrowBack, Logout } from '@mui/icons-material';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MenuIcon from '@mui/icons-material/Menu';
-import { Button, Menu, MenuItem } from '@mui/material';
+import { Button } from '@mui/material';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import Divider from '@mui/material/Divider';
 import MuiDrawer from '@mui/material/Drawer';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -15,7 +14,7 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MenuOptions } from '../components/ListItems';
+import { MenuOptions } from '../components/MenuOptions';
 import ProtectedPage from '../components/ProtectedPage';
 import { useAuth } from '../hooks/AuthContext';
 const drawerWidth: number = 240;
@@ -78,14 +77,7 @@ interface Props {
 export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
     const [open, setOpen] = useState(true);
     const { user, logout } = useAuth();
-    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-        setAnchorEl(event.currentTarget);
-    };
 
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
     const toggleDrawer = () => {
         setOpen(!open);
     };
@@ -100,7 +92,7 @@ export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
                 <AppBar position="absolute" open={open}>
                     <Toolbar
                         sx={{
-                            pr: '24px', // keep right padding when drawer closed
+                            pr: '24px',
                         }}
                     >
                         <IconButton
@@ -125,34 +117,14 @@ export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
                             Sabre
                         </Typography>
                         <div>
-                            <IconButton
-                                size="large"
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="inherit"
+                            <Button
+                                variant="text"
+                                startIcon={<Logout />}
+                                style={{ color: 'white' }}
+                                onClick={()=>{logout()}}
                             >
-                                <AccountCircle />
-                            </IconButton>
-                            <Menu
-                                id="menu-appbar"
-                                anchorEl={anchorEl}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorEl)}
-                                onClose={handleClose}
-                            >
-                                <MenuItem>Profile</MenuItem>
-                                <MenuItem>My account</MenuItem>
-                            </Menu>
+                                Sair
+                            </Button>
                         </div>
                     </Toolbar>
                 </AppBar>
@@ -173,7 +145,7 @@ export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
                         </IconButton>
                     </Toolbar>
 
-                    <MenuOptions />
+                    <MenuOptions isOpen={open} />
                 </Drawer>
                 <Box
                     component="main"
@@ -191,7 +163,7 @@ export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
                     <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
                         <Grid container spacing={3}>
                             <IconButton onClick={() => { navigate(-1) }}>
-                                < ArrowBack />
+                                <ArrowBack />
                             </IconButton>
                             {children}
 

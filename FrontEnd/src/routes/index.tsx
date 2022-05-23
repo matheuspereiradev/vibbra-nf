@@ -6,7 +6,7 @@ import ExpendituresListAll from '../pages/expenditures';
 import NewExpenditure from '../pages/expenditures/newExpenditure';
 import InvoicesListAll from '../pages/invoices';
 import NewInvoice from '../pages/invoices/newInvoice';
-import Landing from '../pages/landing';
+import Dashboard from '../pages/dashboard';
 import Login from '../pages/login';
 import ProductList from '../pages/products';
 import NewProduct from '../pages/products/newProduct';
@@ -19,7 +19,7 @@ import NewUser from '../pages/users/newUser';
 function Routes() {
     return (
         <Router>
-            <Route path="/home" element={<Landing />} />
+            <Route path="/home" element={<Dashboard />} />
             <Route path="/usuarios" element={<UserList />} />
             <Route path="/usuarios/cadastrar" element={<NewUser />} />
             <Route path="/usuarios/editar/:id" element={<NewUser />} />

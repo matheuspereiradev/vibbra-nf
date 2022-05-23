@@ -6,11 +6,6 @@ function UserList() {
 
     const columns: GridColDef[] = [
         {
-            field: 'id',
-            headerName: 'id',
-            width: 70
-        },
-        {
             field: 'name',
             headerName: 'Nome',
             valueGetter: (params: GridValueGetterParams) =>
@@ -31,7 +26,7 @@ function UserList() {
                     backendRoute='users'
                     frontendRoute='usuarios'
                     gridColumns={columns}
-                
+                    label='Usuários'
                 />
             </DashboardLayout>
         </div>

@@ -1,13 +1,9 @@
 import { Button, Grid, Paper } from '@mui/material';
 import { Link } from 'react-router-dom';
 import InvoicesList from '../../components/InvoicesList';
-import ProtectedPage from '../../components/ProtectedPage';
-import { useAuth } from '../../hooks/AuthContext';
 import { DashboardLayout } from '../../layouts/default';
 
 function InvoicesListAll() {
-
-    const { user } = useAuth();
 
     return (
         <div className="App">

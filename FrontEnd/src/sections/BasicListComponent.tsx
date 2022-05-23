@@ -1,4 +1,4 @@
-import { Add, Delete, Edit, More, PlusOne } from '@mui/icons-material';
+import { Add, Delete, Edit } from '@mui/icons-material';
 import { Button, Grid, IconButton, Paper } from '@mui/material';
 import { DataGrid, GridColDef, GridToolbar, ptBR as br } from '@mui/x-data-grid';
 import { useEffect, useState } from 'react';
@@ -10,12 +10,19 @@ import backendApi from '../services/backend.axios';
 interface IListComponent {
     gridColumns: GridColDef[],
     backendRoute: string,
-    frontendRoute: string
+    frontendRoute: string,
+    label: string,
+    searchParams?: string
 }
 
-function BasicListComponent({ gridColumns, backendRoute, frontendRoute }: IListComponent) {
+function BasicListComponent({ gridColumns, backendRoute, frontendRoute, label, searchParams }: IListComponent) {
 
     const columns = [
+        {
+            field: 'id',
+            headerName: 'Cód',
+            width: 70
+        },
         ...gridColumns,
         {
             field: 'edit',
@@ -26,7 +33,7 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute }: IListC
             hideable: false,
             renderCell: (params: any) =>
                 <Link to={`/${frontendRoute}/editar/${params.row.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                    <IconButton aria-label="edit" color="primary">
+                    <IconButton aria-label="edit">
                         <Edit />
                     </IconButton>
                 </Link>
@@ -55,7 +62,7 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute }: IListC
                         }
                     })
 
-                }} aria-label="delete" color="error">
+                }} aria-label="delete">
                     <Delete />
                 </IconButton>
         },
@@ -63,7 +70,7 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute }: IListC
 
     const [rows, setRows] = useState<any[]>([]);
     useEffect(() => {
-        backendApi.get(backendRoute)
+        backendApi.get(!!searchParams ? `${backendRoute}?${searchParams}` : backendRoute)
             .then(({ data }) => {
                 setRows(data)
             })
@@ -78,7 +85,7 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute }: IListC
 
     async function deleteRow(id: number) {
         backendApi.delete(`${backendRoute}/${id}`)
-            .then(({ data }) => {
+            .then(() => {
                 setRows(rows?.filter(row => row.id !== id))
                 Swal.fire(
                     'Excluido!',
@@ -100,8 +107,18 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute }: IListC
         <Grid item xs={12}>
             <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', minHeight: 500 }}>
                 <>
-                    <Title>Usuários</Title>
 
+                    <Grid container>
+                        <Grid item xs={10}>
+                            <Title>{label}</Title>
+                        </Grid>
+                        <Grid item xs={2}>
+                            <Link to={`/${frontendRoute}/cadastrar`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <Button variant="contained" startIcon={<Add />}>Adicionar</Button>
+                            </Link>
+                        </Grid>
+                    </Grid>
+                    <br/>
                     <DataGrid
                         columnBuffer={5}
                         rows={rows}
@@ -115,15 +132,6 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute }: IListC
                             Toolbar: GridToolbar,
                         }}
                     />
-                    <br />
-                    <Grid container>
-                        <Grid item xs={2}>
-                            <Link to={`/${frontendRoute}/cadastrar`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                <Button variant="contained" startIcon={<Add />}>Adicionar</Button>
-                            </Link>
-                        </Grid>
-
-                    </Grid>
                 </>
             </Paper>
         </Grid>
