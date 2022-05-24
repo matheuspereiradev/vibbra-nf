@@ -1,12 +1,11 @@
 import { Save } from '@mui/icons-material';
-import { Button, Grid, MenuItem, Paper, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
-import { IMeansureUnit } from '../../interfaces/meansureunit.interface';
 import { DashboardLayout } from '../../layouts/default';
 import backendApi from '../../services/backend.axios';
 
@@ -17,19 +16,13 @@ interface ICreateData {
     salePrice: number,
     idCompany: number,
     barcode: string,
-    details: string,
-    type:string,
-    idMeansureUnit:string,
-    stockMin:number
+    details: string
 }
 function NewProduct() {
     const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
-
-    const [meansureUnits,setMeansureUnits] = useState<IMeansureUnit[]>([])
-
     const onSubmit = (data: ICreateData) => {
         if (id)
             updateProduct(data)
@@ -87,17 +80,6 @@ function NewProduct() {
                     'error'
                 )
             })
-
-        if(user)
-            backendApi.get(`meansureunit`).then(({ data }) => {
-                setMeansureUnits(data);
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao carregar unidades de medida, se persistir contate o suporte.',
-                    'error'
-                )
-            })
     }, [id, user])
 
     return (
@@ -118,7 +100,7 @@ function NewProduct() {
                                             {...register("name", { required: true, maxLength: 45 })}
                                         />
                                     </Grid>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={8}>
                                         <Typography>Código de barras</Typography>
                                         <TextField
                                             fullWidth
@@ -126,38 +108,6 @@ function NewProduct() {
                                             variant="standard"
                                             {...register("barcode", { required: true })}
                                         />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography>Unidade de medida</Typography>
-                                        <TextField
-                                            id="um"
-                                            select
-                                            fullWidth
-                                            variant="standard"
-                                            {...register("idMeansureUnit")}
-                                        >
-                                            {meansureUnits?.map((um) => (
-                                                <MenuItem key={um.id} value={um.id}>
-                                                    {`${um.abbreviation} - ${um.name}`}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography>Tipo</Typography>
-                                        <TextField
-                                            id="um"
-                                            select
-                                            fullWidth
-                                            variant="standard"
-                                            {...register("type")}
-                                        >
-                                            {meansureUnits?.map((um) => (
-                                                <MenuItem key={um.id} value={um.id}>
-                                                    {`${um.abbreviation} - ${um.name}`}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Typography>Marca</Typography>
@@ -168,7 +118,7 @@ function NewProduct() {
                                             {...register("brandProduct")}
                                         />
                                     </Grid>
-                                    <Grid item xs={2}>
+                                    <Grid item xs={3}>
                                         <Typography>Valor Compra</Typography>
                                         <TextField
                                             fullWidth
@@ -181,7 +131,7 @@ function NewProduct() {
                                             {...register("purchasePrice")}
                                         />
                                     </Grid>
-                                    <Grid item xs={2}>
+                                    <Grid item xs={3}>
                                         <Typography>Valor Venda</Typography>
                                         <TextField
                                             fullWidth
@@ -192,19 +142,6 @@ function NewProduct() {
                                             id="sale"
                                             variant="standard"
                                             {...register("salePrice")}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography>Estoque Minímo</Typography>
-                                        <TextField
-                                            fullWidth
-                                            type="number"
-                                            inputProps={{
-                                                step: ".01"
-                                            }}
-                                            id="stock"
-                                            variant="standard"
-                                            {...register("stockMin")}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

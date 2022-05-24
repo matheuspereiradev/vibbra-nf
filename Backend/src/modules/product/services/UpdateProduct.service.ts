@@ -12,14 +12,14 @@ export class UpdateProductService {
         private repository: IProductRepository
     ) { }
 
-    public async execute({ id, barcode, brandProduct, details, name, purchasePrice, salePrice }: IUpdateProductDTO, idCompany: number): Promise<Product> {
+    public async execute({ id, barcode, brandProduct, details, name,idMeansureUnit, stockMin, purchasePrice, salePrice }: IUpdateProductDTO, idCompany: number): Promise<Product> {
 
 
         if (!await this.repository.findByID(id, idCompany))
             throw new AppError('Product not found')
 
         const provider = await this.repository.update({
-            id, barcode, brandProduct, details, name, purchasePrice, salePrice
+            id, barcode, brandProduct, details, name, purchasePrice, salePrice, stockMin,idMeansureUnit
         });
 
         return provider;

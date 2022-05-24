@@ -5,5 +5,7 @@ export default interface IUpdateProductDTO {
     purchasePrice: number,
     salePrice: number,
     barcode: string,
-    details: string
+    details: string,
+    idMeansureUnit: number,
+    stockMin:number
 }

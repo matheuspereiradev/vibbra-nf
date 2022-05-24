@@ -114,7 +114,7 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute, label, s
                         </Grid>
                         <Grid item xs={2}>
                             <Link to={`/${frontendRoute}/cadastrar`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                                <Button variant="contained" startIcon={<Add />}>Adicionar</Button>
+                                <Button variant="contained" fullWidth startIcon={<Add />}>Adicionar</Button>
                             </Link>
                         </Grid>
                     </Grid>

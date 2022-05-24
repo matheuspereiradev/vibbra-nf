@@ -5,6 +5,9 @@ export default interface ICreateProductDTO {
     salePrice: number,
     idCompany: number,
     barcode: string,
-    details: string
+    details: string,
+    idType: string,
+    idMeansureUnit: number,
+    stockMin:number
 }
 

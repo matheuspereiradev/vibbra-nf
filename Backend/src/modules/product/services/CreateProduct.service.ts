@@ -13,10 +13,10 @@ export class CreateProductService {
 
     ) { }
 
-    public async execute({ idCompany, barcode, brandProduct, details, purchasePrice, salePrice, name }: ICreateProductDTO): Promise<Product> {
+    public async execute({ idCompany, barcode, brandProduct, details, purchasePrice,idMeansureUnit, salePrice, stockMin, idType, name }: ICreateProductDTO): Promise<Product> {
 
         const product = await this.repository.create({
-            idCompany, barcode, brandProduct, details, purchasePrice, salePrice, name
+            idCompany, barcode, brandProduct, details, purchasePrice, salePrice, name, stockMin, idType,idMeansureUnit
         });
 
         return product;

@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "mssqlOptions": {
+                "appName": "SQLTools",
+                "useUTC": true,
+                "encrypt": true
+            },
+            "previewLimit": 50,
+            "server": "52.38.18.228",
+            "port": 1433,
+            "driver": "MSSQL",
+            "name": "POCMEXICO",
+            "username": "wa",
+            "password": "43990669Wa",
+            "database": "WA_POC_MEGAALIMENTOS"
+        }
+    ]
+}

@@ -21,12 +21,19 @@ export class createTableProdut1653092266974 implements MigrationInterface {
                 {
                     name: "product_brand",
                     type: "varchar",
-                    length: "45"
+                    length: "45",
+                    isNullable: true
                 },
                 {
                     name: "barcode",
                     type: "varchar",
-                    length: "120"
+                    length: "120",
+                    isNullable: true
+                },
+                {
+                    name: "type",
+                    type: "varchar",
+                    length: "5"
                 },
                 {
                     name: "details",
@@ -48,6 +55,11 @@ export class createTableProdut1653092266974 implements MigrationInterface {
                     default: 0
                 },
                 {
+                    name: "stock_min",
+                    type: "DECIMAL(8,2)",
+                    default: 0
+                },
+                {
                     name: "deleted_at",
                     type: "timestamp",
                     isNullable: true
@@ -62,7 +74,7 @@ export class createTableProdut1653092266974 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        queryRunner.dropTable("tb_products");
+        await queryRunner.dropTable("tb_products");
     }
 
 }
