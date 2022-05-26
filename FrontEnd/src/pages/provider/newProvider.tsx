@@ -1,78 +1,56 @@
-import { Add, Delete, Save, SmsFailed } from '@mui/icons-material';
-import { Button, Fab, Grid, IconButton, Paper, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
-import ProtectedPage from '../../components/ProtectedPage';
+import { Save } from '@mui/icons-material';
+import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import { useFormik } from 'formik';
+import { useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
-import { IUser } from '../../interfaces/user.interface';
+import { useBackend } from '../../hooks/BackendContext';
 import { DashboardLayout } from '../../layouts/default';
-import backendApi from '../../services/backend.axios';
-import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
-interface ICreateData {
-    name: string,
-    corporateName: string
-}
+const validationSchema = Yup.object({
+    name: Yup.string()
+        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
+        .min(3, 'Campo tem tamanho mínimo de 3 caracteres')
+        .required('O campo não foi preenchido'),
+    corporateName: Yup.string()
+        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
+        .min(15, 'Campo tem tamanho mínimo de 15 caracteres')
+        .required('O campo não foi preenchido')
+});
+const initialValues = {
+    name: '',
+    corporateName: ''
+};
+
 function NewProvider() {
-    const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
-    const onSubmit = (data: ICreateData) => {
-        if (id)
-            updateProvider(data)
-        else
-            createNew(data)
-    };
+    const { post, put, get } = useBackend();
 
-    async function createNew(data: any) {
-        backendApi.post(`providers`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Fornecedor cadastrada com sucesso.',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar fornecedor, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
-
-    async function updateProvider(data: any) {
-        backendApi.put(`providers/${id}`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Fornecedor cadastrada com sucesso.',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar fornecedor, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
+    const formik = useFormik({
+        validateOnChange:false,
+        validateOnBlur:false,
+        initialValues,
+        validationSchema,
+        onSubmit: values => {
+            if (id)
+                put(`providers/${id}`, values)
+            else
+                post('providers', values)
+        },
+    });
 
     useEffect(() => {
-        if (id && user)
-            backendApi.get(`providers/find/${id}`).then(({ data }) => {
-                setValue('corporateName', data.corporateName)
-                setValue('name', data.name)
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao carregar fornecedor, se persistir contate o suporte.',
-                    'error'
-                )
+        if (id && user) {
+            get(`providers/find/${id}`, (data) => {
+                formik.setValues({
+                    name: data.name,
+                    corporateName: data.corporateName
+                })
             })
+        }
     }, [id, user])
 
     return (
@@ -82,7 +60,7 @@ function NewProvider() {
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <>
                             <Title>{id ? `Editar Fornecedor ${id}` : 'Cadastrar Fornecedor'}</Title>
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={formik.handleSubmit}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={4}>
                                         <Typography>Nome</Typography>
@@ -90,7 +68,10 @@ function NewProvider() {
                                             fullWidth
                                             id="name"
                                             variant="standard"
-                                            {...register("name", { required: true, maxLength: 40 })}
+                                            error={!!formik.errors.name}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.name}
+                                            helperText={formik.errors.name}
                                         />
                                     </Grid>
                                     <Grid item xs={8}>
@@ -99,7 +80,10 @@ function NewProvider() {
                                             fullWidth
                                             id="comporate-name"
                                             variant="standard"
-                                            {...register("corporateName", { required: true })}
+                                            error={!!formik.errors.corporateName}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.corporateName}
+                                            helperText={formik.errors.corporateName}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>

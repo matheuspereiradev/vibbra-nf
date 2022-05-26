@@ -1,115 +1,91 @@
 import { Save } from '@mui/icons-material';
 import { Button, Grid, MenuItem, Paper, TextField, Typography } from '@mui/material';
 import { format, parseISO } from 'date-fns';
+import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
+import { useBackend } from '../../hooks/BackendContext';
 import { IExpenditureCategory } from '../../interfaces/categoryExpenditure.interface';
 import { IProvider } from '../../interfaces/provider';
 import { DashboardLayout } from '../../layouts/default';
-import backendApi from '../../services/backend.axios';
 
-interface ICreateData {
-    amount: number,
-    competence: string,
-    description: string,
-    idCategory: number,
-    paymentDate: string
-    idProvider: string,
-}
+const validationSchema = Yup.object({
+    amount: Yup.number()
+        .positive('O valor deve ser maior que 0')
+        .min(0.1, 'Valor mínimo de 1 centavo')
+        .required('O campo não foi preenchido'),
+    description: Yup.string()
+        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
+        .min(15, 'Campo tem tamanho mínimo de 15 caracteres')
+        .required('O campo não foi preenchido'),
+    idCategory: Yup.number()
+        .min(1, 'Campo obrigatório'),
+    idProvider: Yup.number()
+        .min(1, 'Campo obrigatório'),
+});
+
+const initialValues = {
+    amount: 0,
+    competence: format(parseISO(String(new Date().toISOString())), 'yyyy-MM'),
+    description: '',
+    idCategory: 0,
+    paymentDate: format(parseISO(String(new Date().toISOString())), 'yyyy-MM-dd'),
+    idProvider: 0,
+};
 
 function NewExpenditure() {
-    const navigate = useNavigate();
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
     const { user } = useAuth();
     const { id } = useParams();
     const [providers, setProviders] = useState<IProvider[]>([]);
     const [categories, setCategories] = useState<IExpenditureCategory[]>([]);
 
-    const onSubmit = (data: ICreateData) => {
-        const competence = data.competence.split('-')
-        data.competence = `${competence[1]}/${competence[0]}`;
-        data.paymentDate = `${data.paymentDate} 00:00`
-        if (id)
-            updateExpenditure(data)
-        else
-            createNew(data)
-    };
-    console.log(errors);
+    const { post, put, get } = useBackend();
 
-    function createNew(data: any) {
-        backendApi.post(`expenditures`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Despesa cadastrada com sucesso!',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar despesa, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
-    function updateExpenditure(data: any) {
-        backendApi.put(`expenditures/${id}`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Despesa cadastrada com sucesso!',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar despesa, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
+    const formik = useFormik({
+        validateOnChange: false,
+        validateOnBlur: false,
+        initialValues,
+        validationSchema,
+        onSubmit: values => {
+            const competence = values.competence.split('-');
+            values.competence = `${competence[1]}/${competence[0]}`;
+            values.paymentDate = `${values.paymentDate} 00:00`
+
+            if (id)
+                put(`providers/${id}`, values)
+            else
+                post('providers', values)
+        },
+    });
 
     useEffect(() => {
         if (user) {
-            backendApi.get(`providers`).then(({ data }) => {
+            get(`providers`, (data: any) => {
                 setProviders(data);
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao carregar fornecedores, se persistir contate o suporte.',
-                    'error'
-                )
-            })
-            backendApi.get(`expenditures/categories`).then(({ data }) => {
+            });
+
+            get(`expenditures/categories`, (data: any) => {
                 setCategories(data);
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao carregar categorias, se persistir contate o suporte.',
-                    'error'
-                )
-            })
+            });
+
+
             if (id)
-                backendApi.get(`expenditures/find/${id}`).then(({ data }) => {
+                get(`expenditures/find/${id}`, (data: any) => {
                     const competence = data.competence.split('/');
-                    setValue("amount", data.amount)
-                    setValue("competence", `${competence[1]}-${competence[0]}`)
-                    setValue("description", data.description)
-                    setValue("idProvider", data.provider.id)
-                    setValue("paymentDate", data.paymentDate.slice(0, 10))
-                }).catch(() => {
-                    Swal.fire(
-                        'Ops!',
-                        'Ocorreu um erro ao carregar dados da despesa, se persistir contate o suporte.',
-                        'error'
-                    )
-                })
+                    formik.setValues({
+                        amount: data.amount,
+                        competence: `${competence[1]}-${competence[0]}`,
+                        description: data.description,
+                        idProvider: data.provider.id,
+                        paymentDate: data.paymentDate.slice(0, 10),
+                        idCategory: data.idCategory
+                    })
+                });
         }
-    }, [user, id, setValue])
+    }, [user, id])
 
     return (
         <div className="App">
@@ -118,7 +94,7 @@ function NewExpenditure() {
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <>
                             <Title>{id ? `Editar Despesa ${id}` : 'Lançar Despesa'}</Title>
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={formik.handleSubmit}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={1}>
                                         <Typography>Valor</Typography>
@@ -130,7 +106,10 @@ function NewExpenditure() {
                                                 step: ".01"
                                             }}
                                             variant="standard"
-                                            {...register("amount", { required: true })}
+                                            error={!!formik.errors.amount}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.amount}
+                                            helperText={formik.errors.amount}
                                         />
                                     </Grid>
                                     <Grid item xs={7}>
@@ -139,18 +118,24 @@ function NewExpenditure() {
                                             fullWidth
                                             id="descricao"
                                             variant="standard"
-                                            {...register("description", { required: true })}
+                                            error={!!formik.errors.description}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.description}
+                                            helperText={formik.errors.description}
                                         />
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Typography>Data de pagamento</Typography>
                                         <TextField
                                             fullWidth
-                                            defaultValue={format(parseISO(String(new Date().toISOString())), 'yyyy-MM-dd')}
                                             type="date"
                                             id="paymentdate"
                                             variant="standard"
-                                            {...register("paymentDate", { required: true })} />
+                                            error={!!formik.errors.paymentDate}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.paymentDate}
+                                            helperText={formik.errors.paymentDate}
+                                        />
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Typography>Competência</Typography>
@@ -158,19 +143,29 @@ function NewExpenditure() {
                                             fullWidth
                                             type="month"
                                             id="competence"
-                                            defaultValue={format(parseISO(String(new Date().toISOString())), 'yyyy-MM')}
                                             variant="standard"
-                                            {...register("competence", { required: true })} />
+                                            error={!!formik.errors.competence}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.competence}
+                                            helperText={formik.errors.competence}
+                                        />
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Typography>Fornecedor</Typography>
                                         <TextField
-                                            id="provider"
-                                            select
-                                            fullWidth
                                             variant="standard"
-                                            {...register("idProvider")}
+                                            fullWidth
+                                            name="idProvider"
+                                            id="idProvider"
+                                            select
+                                            value={formik.values.idProvider}
+                                            onChange={formik.handleChange}
+                                            error={!!formik.errors.idProvider}
+                                            helperText={formik.errors.idProvider}
                                         >
+                                            <MenuItem key="0" value={0}>
+                                                Selecione um fornecedor
+                                            </MenuItem>
                                             {providers?.map((provider) => (
                                                 <MenuItem key={provider.id} value={provider.id}>
                                                     {`${provider.name}`}
@@ -180,16 +175,24 @@ function NewExpenditure() {
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Typography>Categoria</Typography>
+
                                         <TextField
-                                            id="select-category"
-                                            select
-                                            fullWidth
                                             variant="standard"
-                                            {...register("idCategory")}
+                                            fullWidth
+                                            name="idCategory"
+                                            id="idCategory"
+                                            select
+                                            value={formik.values.idCategory}
+                                            onChange={formik.handleChange}
+                                            error={!!formik.errors.idCategory}
+                                            helperText={formik.errors.idCategory}
                                         >
-                                            {categories?.map((category) => (
-                                                <MenuItem key={category.id} value={category.id}>
-                                                    {category.name}
+                                            <MenuItem key={0} value={0}>
+                                                Selecione uma categoria
+                                            </MenuItem>
+                                            {categories?.map((option) => (
+                                                <MenuItem key={option.id} value={option.id}>
+                                                    {option.name}
                                                 </MenuItem>
                                             ))}
                                         </TextField>
@@ -205,7 +208,7 @@ function NewExpenditure() {
                     </Paper>
                 </Grid>
             </DashboardLayout>
-        </div>
+        </div >
     );
 }
 

@@ -1,76 +1,56 @@
 import { Save } from '@mui/icons-material';
 import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import { useFormik } from 'formik';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import ProtectedPage from '../../components/ProtectedPage';
+import { useParams } from 'react-router-dom';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
+import { useBackend } from '../../hooks/BackendContext';
 import { DashboardLayout } from '../../layouts/default';
-import backendApi from '../../services/backend.axios';
+import * as Yup from 'yup';
 
-interface ICreateData {
-    name: string,
-    description: string
-}
+const validationSchema = Yup.object({
+    name: Yup.string()
+        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
+        .min(3, 'Campo tem tamanho mínimo de 3 caracteres')
+        .required('O campo não foi preenchido'),
+    description: Yup.string()
+        .max(100, 'Campo excede tamanho maximo de 100 caracteres')
+        .min(15, 'Campo tem tamanho mínimo de 15 caracteres')
+        .required('O campo não foi preenchido')
+});
+const initialValues = {
+    name: '',
+    description: ''
+};
+
 function NewCategoryExpenditure() {
-    const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
-    const onSubmit = (data: ICreateData) => {
-        if (id)
-            updateCategory(data)
-        else
-            createNew(data)
-    };
-    async function updateCategory(data: any) {
-        backendApi.put(`expenditures/categories/${id}`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Categoria editada com sucesso.',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar categoria, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
+    const { post, put, get } = useBackend();
 
-    async function createNew(data: any) {
-        backendApi.post(`expenditures/categories`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Categoria cadastrada com sucesso.',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar categoria, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
+    const formik = useFormik({
+        validateOnChange: false,
+        validateOnBlur: false,
+        initialValues,
+        validationSchema,
+        onSubmit: values => {
+            if (id)
+                put(`expenditures/categories/${id}`, values)
+            else
+                post('expenditures/categories', values)
+        },
+    });
 
     useEffect(() => {
-        if (id && user)
-            backendApi.get(`expenditures/categories/find/${id}`).then(({ data }) => {
-                setValue("name", data.name)
-                setValue("description", data.description)
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao carregar categoria, se persistir contate o suporte.',
-                    'error'
-                )
+        if (id && user) {
+            get(`expenditures/categories/find/${id}`, (data) => {
+                formik.setValues({
+                    name: data.name,
+                    description: data.description
+                })
             })
+        }
     }, [id, user])
 
     return (
@@ -80,7 +60,7 @@ function NewCategoryExpenditure() {
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <>
                             <Title>Cadastrar Categoria de Despesa</Title>
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={formik.handleSubmit}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={4}>
                                         <Typography>Nome</Typography>
@@ -88,7 +68,10 @@ function NewCategoryExpenditure() {
                                             fullWidth
                                             id="name"
                                             variant="standard"
-                                            {...register("name", { required: true, maxLength: 40 })}
+                                            error={!!formik.errors.name}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.name}
+                                            helperText={formik.errors.name}
                                         />
                                     </Grid>
                                     <Grid item xs={8}>
@@ -97,12 +80,15 @@ function NewCategoryExpenditure() {
                                             fullWidth
                                             id="descrition"
                                             variant="standard"
-                                            {...register("description", { required: true, maxLength: 140 })}
+                                            error={!!formik.errors.description}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.description}
+                                            helperText={formik.errors.description}
                                         />
                                     </Grid>
 
                                     <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" endIcon={<Save />}>
+                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
                                             Salvar
                                         </Button>
                                     </Grid>

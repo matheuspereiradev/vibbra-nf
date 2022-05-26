@@ -1,11 +1,14 @@
 import { AuthProvider } from './hooks/AuthContext';
+import { BackendProvider } from './hooks/BackendContext';
 import Routes from './routes';
 
 function App() {
   return (
-    <AuthProvider>
-      <Routes />
-    </AuthProvider>
+    <BackendProvider>
+      <AuthProvider>
+        <Routes />
+      </AuthProvider>
+    </BackendProvider>
   );
 }
 

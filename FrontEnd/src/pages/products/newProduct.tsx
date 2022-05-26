@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
 import { IMeansureUnit } from '../../interfaces/meansureunit.interface';
+import { IProductType } from '../../interfaces/productTypes';
 import { DashboardLayout } from '../../layouts/default';
 import backendApi from '../../services/backend.axios';
 
@@ -18,9 +19,9 @@ interface ICreateData {
     idCompany: number,
     barcode: string,
     details: string,
-    type:string,
-    idMeansureUnit:string,
-    stockMin:number
+    idType: string,
+    idMeansureUnit: string,
+    stockMin: number
 }
 function NewProduct() {
     const navigate = useNavigate();
@@ -28,7 +29,8 @@ function NewProduct() {
     const { user } = useAuth();
     const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
 
-    const [meansureUnits,setMeansureUnits] = useState<IMeansureUnit[]>([])
+    const [meansureUnits, setMeansureUnits] = useState<IMeansureUnit[]>([])
+    const [productTypes, setProductTypes] = useState<IProductType[]>([])
 
     const onSubmit = (data: ICreateData) => {
         if (id)
@@ -88,7 +90,7 @@ function NewProduct() {
                 )
             })
 
-        if(user)
+        if (user) {
             backendApi.get(`meansureunit`).then(({ data }) => {
                 setMeansureUnits(data);
             }).catch(() => {
@@ -98,6 +100,16 @@ function NewProduct() {
                     'error'
                 )
             })
+            backendApi.get(`producttype`).then(({ data }) => {
+                setProductTypes(data);
+            }).catch(() => {
+                Swal.fire(
+                    'Ops!',
+                    'Ocorreu um erro ao carregar tipos de produto, se persistir contate o suporte.',
+                    'error'
+                )
+            })
+        }
     }, [id, user])
 
     return (
@@ -146,15 +158,15 @@ function NewProduct() {
                                     <Grid item xs={2}>
                                         <Typography>Tipo</Typography>
                                         <TextField
-                                            id="um"
+                                            id="pt"
                                             select
                                             fullWidth
                                             variant="standard"
-                                            {...register("type")}
+                                            {...register("idType")}
                                         >
-                                            {meansureUnits?.map((um) => (
-                                                <MenuItem key={um.id} value={um.id}>
-                                                    {`${um.abbreviation} - ${um.name}`}
+                                            {productTypes?.map((pt) => (
+                                                <MenuItem key={pt.id} value={pt.id}>
+                                                    {`${pt.id} - ${pt.name}`}
                                                 </MenuItem>
                                             ))}
                                         </TextField>

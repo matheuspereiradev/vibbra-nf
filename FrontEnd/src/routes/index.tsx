@@ -1,4 +1,4 @@
-import { Route, Routes as Router } from 'react-router-dom';
+import { Link, Route, Routes as Router } from 'react-router-dom';
 import BalanceDashboard from '../pages/balance';
 import ExpenditureCategoryList from '../pages/expenditureCategory';
 import NewCategoryExpenditure from '../pages/expenditureCategory/newCategoryExpenditure';
@@ -15,10 +15,16 @@ import NewProvider from '../pages/provider/newProvider';
 import Settings from '../pages/settings';
 import UserList from '../pages/users';
 import NewUser from '../pages/users/newUser';
+import { Button } from '@mui/material';
 
 function Routes() {
     return (
         <Router>
+            <Route path="/" element={
+                <Link color="primary" to="/entrar" style={{ textDecoration: 'none', color: 'inherit' }}>
+                    <Button variant="contained">Login</Button>
+                </Link>
+            } />
             <Route path="/home" element={<Dashboard />} />
             <Route path="/usuarios" element={<UserList />} />
             <Route path="/usuarios/cadastrar" element={<NewUser />} />

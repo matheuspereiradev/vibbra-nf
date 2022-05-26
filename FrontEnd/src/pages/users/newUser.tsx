@@ -1,77 +1,67 @@
 import { Save } from '@mui/icons-material';
 import { Button, Grid, Paper, TextField, Typography } from '@mui/material';
+import { useFormik } from 'formik';
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
+import { useBackend } from '../../hooks/BackendContext';
 import { DashboardLayout } from '../../layouts/default';
-import backendApi from '../../services/backend.axios';
 
-interface ICreateData {
-    name: string,
-    surname: string,
-    password: string,
-    email: string
-}
+const validationSchema = Yup.object({
+    name: Yup.string()
+        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
+        .min(3, 'Campo tem tamanho mínimo de 3 caracteres')
+        .required('O campo não foi preenchido'),
+    surname: Yup.string()
+        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
+        .min(3, 'Campo tem tamanho mínimo de 3 caracteres')
+        .required('O campo não foi preenchido'),
+    password: Yup.string()
+        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
+        .min(8, 'Campo tem tamanho mínimo de 8 caracteres')
+        .required('O campo não foi preenchido'),
+    email: Yup.string()
+        .email('Endereço de email inválido')
+        .max(50, 'Campo excede tamanho maximo de 50 caracteres')
+        .min(10, 'Campo tem tamanho mínimo de 10 caracteres')
+        .required('O campo não foi preenchido'),
+});
+const initialValues = {
+    name: '',
+    surname: '',
+    email: '',
+    password: ''
+};
+
 function NewUser() {
-    const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
-    const onSubmit = (data: ICreateData) => {
-        if (id)
-            updateUser(data)
-        else
-            createNew(data)
-    };
+    const { post, put, get } = useBackend();
 
-    function createNew(data: any) {
-        backendApi.post(`users`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Usuário cadastrado com sucesso.',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar usuário, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
-    function updateUser(data: any) {
-        backendApi.put(`users/${id}`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Usuário editado com sucesso.',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar usuário, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
+    const formik = useFormik({
+        validateOnChange:false,
+        validateOnBlur:false,
+        initialValues,
+        validationSchema,
+        onSubmit: values => {
+            if (id)
+                put(`users/${id}`, values)
+            else
+                post('users', values)
+        },
+    });
 
     useEffect(() => {
         if (id && user) {
-            backendApi.get(`users/find/${id}`).then(({ data }) => {
-                setValue('email', data.email)
-                setValue('name', data.name)
-                setValue('surname', data.surname)
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao caregar usuário, se persistir contate o suporte.',
-                    'error'
-                )
+            get(`users/find/${id}`, (data) => {
+                formik.setValues({
+                    name: data.name,
+                    email: data.email,
+                    surname: data.surname,
+                    password: ''
+                })
             })
         }
     }, [id, user])
@@ -83,7 +73,7 @@ function NewUser() {
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <>
                             <Title>Cadastrar Usuário</Title>
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={formik.handleSubmit}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={6}>
                                         <Typography>Nome</Typography>
@@ -91,7 +81,11 @@ function NewUser() {
                                             fullWidth
                                             id="name"
                                             variant="standard"
-                                            {...register("name", { required: true, maxLength: 40 })} />
+                                            error={!!formik.errors.name}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.name}
+                                            helperText={formik.errors.name}
+                                        />
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Typography>Sobrenome</Typography>
@@ -99,7 +93,11 @@ function NewUser() {
                                             fullWidth
                                             id="surname"
                                             variant="standard"
-                                            {...register("surname", { required: true, maxLength: 40 })} />
+                                            error={!!formik.errors.surname}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.surname}
+                                            helperText={formik.errors.surname}
+                                        />
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Typography>Email</Typography>
@@ -108,7 +106,11 @@ function NewUser() {
                                             fullWidth
                                             id="email"
                                             variant="standard"
-                                            {...register("email", { required: true, pattern: /^\S+@\S+$/i })} />
+                                            error={!!formik.errors.email}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.email}
+                                            helperText={formik.errors.email}
+                                        />
                                     </Grid>
                                     <Grid item xs={6}>
                                         <Typography>Senha</Typography>
@@ -117,10 +119,14 @@ function NewUser() {
                                             fullWidth
                                             id="password"
                                             variant="standard"
-                                            {...register("password", { required: true, minLength: 6, maxLength: 12 })} />
+                                            error={!!formik.errors.password}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.password}
+                                            helperText={formik.errors.password}
+                                        />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" endIcon={<Save />}>
+                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
                                             Salvar
                                         </Button>
                                     </Grid>
