@@ -55,9 +55,9 @@ function NewExpenditure() {
             values.paymentDate = `${values.paymentDate} 00:00`
 
             if (id)
-                put(`providers/${id}`, values)
+                put(`expenditures/${id}`, values)
             else
-                post('providers', values)
+                post('expenditures', values)
         },
     });
 
@@ -116,7 +116,7 @@ function NewExpenditure() {
                                         <Typography>Descrição</Typography>
                                         <TextField
                                             fullWidth
-                                            id="descricao"
+                                            id="description"
                                             variant="standard"
                                             error={!!formik.errors.description}
                                             onChange={formik.handleChange}
@@ -129,7 +129,7 @@ function NewExpenditure() {
                                         <TextField
                                             fullWidth
                                             type="date"
-                                            id="paymentdate"
+                                            id="paymentDate"
                                             variant="standard"
                                             error={!!formik.errors.paymentDate}
                                             onChange={formik.handleChange}

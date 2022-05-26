@@ -1,5 +1,5 @@
 
-import { getRepository, Repository } from 'typeorm';
+import { getRepository, In, Repository } from 'typeorm';
 import IProductTypeRepository from '../../interfaces/IProductTypeRepository';
 import { ProductType } from '../entities/ProductType';
 
@@ -16,8 +16,12 @@ export class ProductTypeRepository implements IProductTypeRepository {
         return all;
     };
 
-    public async findAll(): Promise<Array<ProductType>> {
-        const all = await this.ormRepository.find();
+    public async findAll(types = ['SRV', 'PPD', 'ALM', 'INS', 'PAC']): Promise<Array<ProductType>> {
+        const all = await this.ormRepository.find({
+            where:{
+                id:In(types)
+            }
+        });
         return all;
     }
 };

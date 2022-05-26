@@ -78,7 +78,7 @@ function NewProvider() {
                                         <Typography>Razão Social</Typography>
                                         <TextField
                                             fullWidth
-                                            id="comporate-name"
+                                            id="corporateName"
                                             variant="standard"
                                             error={!!formik.errors.corporateName}
                                             onChange={formik.handleChange}

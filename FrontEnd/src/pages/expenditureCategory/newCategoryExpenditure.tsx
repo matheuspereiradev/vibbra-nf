@@ -78,7 +78,7 @@ function NewCategoryExpenditure() {
                                         <Typography>Descrição</Typography>
                                         <TextField
                                             fullWidth
-                                            id="descrition"
+                                            id="description"
                                             variant="standard"
                                             error={!!formik.errors.description}
                                             onChange={formik.handleChange}

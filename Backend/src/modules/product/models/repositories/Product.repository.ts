@@ -18,7 +18,7 @@ export class ProductRepository implements IProductRepository {
         return all;
     };
 
-    public async findAll(idCompany: number, types = ['SRV', 'PRD', 'ALM', 'INS', 'PAC']): Promise<Array<Product>> {
+    public async findAll(idCompany: number, types = ['SRV', 'PPD', 'ALM', 'INS', 'PAC']): Promise<Array<Product>> {
         const all = await this.ormRepository.find({
             relations: ['meansureUnit', 'type'],
             where: {
