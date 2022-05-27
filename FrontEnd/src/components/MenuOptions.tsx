@@ -1,4 +1,4 @@
-import { Balance, BorderAll, Business, ExpandLess, ExpandMore, Inventory, Paid, QrCode, Receipt, Settings } from '@mui/icons-material';
+import { Balance, BorderAll, Business, ExpandLess, ExpandMore, Handyman, Inventory, Paid, ProductionQuantityLimits, QrCode, Receipt, Settings, WorkHistory } from '@mui/icons-material';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import { Avatar, Box, Collapse, Divider, List, ListItem, ListItemAvatar } from '@mui/material';
@@ -100,13 +100,29 @@ export function MenuOptions({ isOpen }: { isOpen: boolean }) {
         {expanded === 'products' ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
       <Collapse in={expanded === 'products'} timeout="auto" unmountOnExit>
-        <List component="div" disablePadding>
+        <List component="div" style={{background: '#F5F5F5'}} disablePadding>
           <Link to="/produtos" style={{ textDecoration: 'none', color: 'inherit' }}>
             <ListItemButton sx={{ pl }}>
               <ListItemIcon>
                 <Inventory />
               </ListItemIcon>
-              <ListItemText primary="Prod consumidor" />
+              <ListItemText primary="Produtos" />
+            </ListItemButton>
+          </Link>
+          <Link to="/servicos" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItemButton sx={{ pl }}>
+              <ListItemIcon>
+                <Handyman />
+              </ListItemIcon>
+              <ListItemText primary="Serviços" />
+            </ListItemButton>
+          </Link>
+          <Link to="/almoxarifado" style={{ textDecoration: 'none', color: 'inherit' }}>
+            <ListItemButton sx={{ pl }}>
+              <ListItemIcon>
+                <ProductionQuantityLimits />
+              </ListItemIcon>
+              <ListItemText primary="Almoxarifado" />
             </ListItemButton>
           </Link>
         </List>

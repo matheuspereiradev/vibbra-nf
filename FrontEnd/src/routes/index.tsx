@@ -16,6 +16,8 @@ import Settings from '../pages/settings';
 import UserList from '../pages/users';
 import NewUser from '../pages/users/newUser';
 import { Button } from '@mui/material';
+import ServicesList from '../pages/service';
+import NewService from '../pages/service/newService';
 
 function Routes() {
     return (
@@ -46,6 +48,9 @@ function Routes() {
             <Route path="/produtos" element={<ProductList />} />
             <Route path="/produtos/cadastrar" element={<NewProduct />} />
             <Route path="/produtos/editar/:id" element={<NewProduct />} />
+            <Route path="/servicos" element={<ServicesList />} />
+            <Route path="/servicos/cadastrar" element={<NewService />} />
+            <Route path="/servicos/editar/:id" element={<NewService />} />
             <Route path="/entrar" element={<Login />} />
         </Router>
 

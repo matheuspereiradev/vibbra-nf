@@ -21,13 +21,13 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute, label, s
         {
             field: 'id',
             headerName: 'Cód',
-            width: 70
+            width: 50
         },
         ...gridColumns,
         {
             field: 'edit',
             headerName: 'Editar',
-            width: 70,
+            width: 60,
             sortable: false,
             filterable: false,
             hideable: false,
@@ -42,7 +42,7 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute, label, s
         {
             field: 'delete',
             headerName: 'Excluir',
-            width: 70,
+            width: 60,
             sortable: false,
             filterable: false,
             hideable: false,

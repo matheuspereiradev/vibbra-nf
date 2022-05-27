@@ -3,41 +3,19 @@ import { DashboardLayout } from '../../layouts/default';
 import BasicListComponent from '../../sections/BasicListComponent';
 
 
-function ProductList() {
+function ServicesList() {
 
     const columns: GridColDef[] = [
         {
             field: 'name',
             headerName: 'Nome',
-            width: 200
-        },
-        {
-            field: 'brandProduct',
-            headerName: 'Marca',
-            width: 180,
-        },
-        {
-            field: 'purchasePrice',
-            headerName: 'Vl. de compra',
-            type: 'number',
-            width: 110,
+            width: 400
         },
         {
             field: 'salePrice',
-            headerName: 'Vl. de venda',
+            headerName: 'Vl. de serviço',
             type: 'number',
             width: 110,
-        },
-        {
-            field: 'barcode',
-            headerName: 'Cd de Barras',
-            width: 150,
-        },
-        {
-            field: 'meansureUnit',
-            headerName: 'Und Medida',
-            valueGetter: (params: GridValueGetterParams) => params.row.meansureUnit.abbreviation,
-            width: 100
         },
         {
             field: 'type',
@@ -52,14 +30,14 @@ function ProductList() {
             <DashboardLayout titleKey='Teste'>
                 <BasicListComponent
                     backendRoute='products'
-                    frontendRoute='produtos'
+                    frontendRoute='servicos'
                     gridColumns={columns}
-                    label='Produtos'
-                    searchParams='types=PAC,PPD,INS'
+                    label='Serviços'
+                    searchParams='types=SRV'
                 />
             </DashboardLayout>
         </div>
     );
 }
 
-export default ProductList;
+export default ServicesList;

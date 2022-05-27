@@ -122,7 +122,7 @@ function Settings() {
                                     </Grid>
 
                                     <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" endIcon={<Save />}>
+                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
                                             Salvar
                                         </Button>
                                     </Grid>

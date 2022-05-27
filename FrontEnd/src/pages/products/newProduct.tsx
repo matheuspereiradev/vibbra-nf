@@ -1,116 +1,88 @@
 import { Save } from '@mui/icons-material';
 import { Button, Grid, MenuItem, Paper, TextField, Typography } from '@mui/material';
+import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useNavigate, useParams } from 'react-router-dom';
-import Swal from 'sweetalert2';
+import { useParams } from 'react-router-dom';
+import * as Yup from 'yup';
 import Title from '../../components/Title';
 import { useAuth } from '../../hooks/AuthContext';
+import { useBackend } from '../../hooks/BackendContext';
 import { IMeansureUnit } from '../../interfaces/meansureunit.interface';
 import { IProductType } from '../../interfaces/productTypes';
 import { DashboardLayout } from '../../layouts/default';
-import backendApi from '../../services/backend.axios';
 
-interface ICreateData {
-    name: string,
-    brandProduct: string,
-    purchasePrice: number,
-    salePrice: number,
-    idCompany: number,
-    barcode: string,
-    details: string,
-    idType: string,
-    idMeansureUnit: string,
-    stockMin: number
-}
+const validationSchema = Yup.object({
+    name: Yup.string()
+        .max(45, 'Campo excede tamanho maximo de 45 caracteres')
+        .min(3, 'Campo tem tamanho mínimo de 3 caracteres')
+        .required('O campo não foi preenchido'),
+    idType: Yup.string()
+        .min(2, 'Campo é obrigatório')
+        .required('O campo não foi preenchido'),
+    idMeansureUnit: Yup.number()
+        .min(1, 'Campo é obrigatório')
+        .required('O campo não foi preenchido'),
+});
+const initialValues = {
+    name: "",
+    brandProduct: "",
+    purchasePrice: 0,
+    salePrice: 0,
+    barcode: "",
+    details: "",
+    idType: "0",
+    idMeansureUnit: 0,
+    stockMin: 0
+};
+
 function NewProduct() {
-    const navigate = useNavigate();
     const { id } = useParams();
     const { user } = useAuth();
-    const { register, handleSubmit, formState: { errors }, setValue } = useForm<ICreateData>();
 
+    const { post, put, get } = useBackend();
     const [meansureUnits, setMeansureUnits] = useState<IMeansureUnit[]>([])
     const [productTypes, setProductTypes] = useState<IProductType[]>([])
 
-    const onSubmit = (data: ICreateData) => {
-        if (id)
-            updateProduct(data)
-        else
-            createNew(data)
-    };
-
-    async function createNew(data: any) {
-        backendApi.post(`products`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Produto cadastrado com sucesso.',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar produto, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
-
-    async function updateProduct(data: any) {
-        backendApi.put(`products/${id}`, data).then(() => {
-            Swal.fire(
-                'Sucesso!',
-                'Produto cadastrado com sucesso.',
-                'success'
-            )
-            navigate(-1)
-        }).catch(() => {
-            Swal.fire(
-                'Ops!',
-                'Ocorreu um erro ao salvar fornecedor, se persistir contate o suporte.',
-                'error'
-            )
-        })
-    }
+    const formik = useFormik({
+        validateOnChange: false,
+        validateOnBlur: false,
+        initialValues,
+        validationSchema,
+        onSubmit: values => {
+            if (id)
+                put(`products/${id}`, values)
+            else
+                post('products', values)
+        },
+    });
 
     useEffect(() => {
-        if (id && user)
-            backendApi.get(`products/find/${id}`).then(({ data }) => {
-                setValue('barcode', data.barcode)
-                setValue('brandProduct', data.brandProduct)
-                setValue('details', data.details)
-                setValue('name', data.name)
-                setValue('purchasePrice', data.purchasePrice)
-                setValue('salePrice', data.salePrice)
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao carregar produto, se persistir contate o suporte.',
-                    'error'
-                )
-            })
-
         if (user) {
-            backendApi.get(`meansureunit`).then(({ data }) => {
+            get(`meansureunit`, (data: any) => {
                 setMeansureUnits(data);
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao carregar unidades de medida, se persistir contate o suporte.',
-                    'error'
-                )
-            })
-            backendApi.get(`producttype`).then(({ data }) => {
+            });
+
+            get(`producttype?types=PAC,PPD,INS`, (data: any) => {
                 setProductTypes(data);
-            }).catch(() => {
-                Swal.fire(
-                    'Ops!',
-                    'Ocorreu um erro ao carregar tipos de produto, se persistir contate o suporte.',
-                    'error'
-                )
-            })
+            });
+
+
+            if (id)
+                get(`products/find/${id}`, (data: any) => {
+                    formik.setValues({
+                        barcode: data.barcode,
+                        brandProduct: data.brandProduct,
+                        details: data.details,
+                        idMeansureUnit: data.idMeansureUnit,
+                        idType: data.idType,
+                        name: data.name,
+                        purchasePrice: data.purchasePrice,
+                        salePrice: data.salePrice,
+                        stockMin: data.stockMin
+                    })
+                });
         }
-    }, [id, user])
+    }, [user, id])
 
     return (
         <div className="App">
@@ -119,7 +91,7 @@ function NewProduct() {
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <>
                             <Title>{id ? `Editar Produto ${id}` : 'Cadastrar Produto'}</Title>
-                            <form onSubmit={handleSubmit(onSubmit)}>
+                            <form onSubmit={formik.handleSubmit}>
                                 <Grid container spacing={2}>
                                     <Grid item xs={4}>
                                         <Typography>Nome</Typography>
@@ -127,7 +99,10 @@ function NewProduct() {
                                             fullWidth
                                             id="name"
                                             variant="standard"
-                                            {...register("name", { required: true, maxLength: 45 })}
+                                            error={!!formik.errors.name}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.name}
+                                            helperText={formik.errors.name}
                                         />
                                     </Grid>
                                     <Grid item xs={4}>
@@ -136,18 +111,28 @@ function NewProduct() {
                                             fullWidth
                                             id="barcode"
                                             variant="standard"
-                                            {...register("barcode", { required: true })}
+                                            error={!!formik.errors.barcode}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.barcode}
+                                            helperText={formik.errors.barcode}
                                         />
                                     </Grid>
                                     <Grid item xs={2}>
                                         <Typography>Unidade de medida</Typography>
                                         <TextField
-                                            id="um"
+                                            id="idMeansureUnit"
+                                            name="idMeansureUnit"
                                             select
                                             fullWidth
                                             variant="standard"
-                                            {...register("idMeansureUnit")}
+                                            error={!!formik.errors.idMeansureUnit}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.idMeansureUnit}
+                                            helperText={formik.errors.idMeansureUnit}
                                         >
+                                            <MenuItem key={0} value={0}>
+                                                Selecione
+                                            </MenuItem>
                                             {meansureUnits?.map((um) => (
                                                 <MenuItem key={um.id} value={um.id}>
                                                     {`${um.abbreviation} - ${um.name}`}
@@ -158,12 +143,19 @@ function NewProduct() {
                                     <Grid item xs={2}>
                                         <Typography>Tipo</Typography>
                                         <TextField
-                                            id="pt"
+                                            id="idType"
+                                            name="idType"
                                             select
                                             fullWidth
                                             variant="standard"
-                                            {...register("idType")}
+                                            error={!!formik.errors.idType}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.idType}
+                                            helperText={formik.errors.idType}
                                         >
+                                            <MenuItem key="0" value="0">
+                                                Selecione
+                                            </MenuItem>
                                             {productTypes?.map((pt) => (
                                                 <MenuItem key={pt.id} value={pt.id}>
                                                     {`${pt.id} - ${pt.name}`}
@@ -177,7 +169,10 @@ function NewProduct() {
                                             fullWidth
                                             id="brandProduct"
                                             variant="standard"
-                                            {...register("brandProduct")}
+                                            error={!!formik.errors.brandProduct}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.brandProduct}
+                                            helperText={formik.errors.brandProduct}
                                         />
                                     </Grid>
                                     <Grid item xs={2}>
@@ -185,12 +180,15 @@ function NewProduct() {
                                         <TextField
                                             fullWidth
                                             type="number"
-                                            id="purchase"
+                                            id="purchasePrice"
+                                            error={!!formik.errors.purchasePrice}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.purchasePrice}
+                                            helperText={formik.errors.purchasePrice}
                                             variant="standard"
                                             inputProps={{
                                                 step: ".01"
                                             }}
-                                            {...register("purchasePrice")}
                                         />
                                     </Grid>
                                     <Grid item xs={2}>
@@ -201,9 +199,12 @@ function NewProduct() {
                                             inputProps={{
                                                 step: ".01"
                                             }}
-                                            id="sale"
+                                            id="salePrice"
                                             variant="standard"
-                                            {...register("salePrice")}
+                                            error={!!formik.errors.salePrice}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.salePrice}
+                                            helperText={formik.errors.salePrice}
                                         />
                                     </Grid>
                                     <Grid item xs={2}>
@@ -214,9 +215,12 @@ function NewProduct() {
                                             inputProps={{
                                                 step: ".01"
                                             }}
-                                            id="stock"
+                                            id="stockMin"
+                                            error={!!formik.errors.stockMin}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.stockMin}
+                                            helperText={formik.errors.stockMin}
                                             variant="standard"
-                                            {...register("stockMin")}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -225,11 +229,14 @@ function NewProduct() {
                                             fullWidth
                                             id="details"
                                             variant="standard"
-                                            {...register("details")}
+                                            error={!!formik.errors.details}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.details}
+                                            helperText={formik.errors.details}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" endIcon={<Save />}>
+                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
                                             Salvar
                                         </Button>
                                     </Grid>

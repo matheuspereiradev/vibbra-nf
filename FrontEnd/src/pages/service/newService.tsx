@@ -11,47 +11,53 @@ import { DashboardLayout } from '../../layouts/default';
 
 const validationSchema = Yup.object({
     name: Yup.string()
-        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
+        .max(45, 'Campo excede tamanho maximo de 45 caracteres')
         .min(3, 'Campo tem tamanho mínimo de 3 caracteres')
         .required('O campo não foi preenchido'),
-    corporateName: Yup.string()
-        .max(40, 'Campo excede tamanho maximo de 40 caracteres')
-        .min(15, 'Campo tem tamanho mínimo de 15 caracteres')
-        .required('O campo não foi preenchido')
+    salePrice: Yup.number()
+        .min(1, 'Valor mínimo de 1,00 R$')
+        .required('O campo não foi preenchido'),
 });
 const initialValues = {
-    name: '',
-    corporateName: ''
+    name: "",
+    salePrice: 0,
+    details: "",
+    idType: "SRV",
 };
 
-function NewProvider() {
+function NewService() {
     const { id } = useParams();
     const { user } = useAuth();
+
     const { post, put, get } = useBackend();
 
     const formik = useFormik({
-        validateOnChange:false,
-        validateOnBlur:false,
+        validateOnChange: false,
+        validateOnBlur: false,
         initialValues,
         validationSchema,
         onSubmit: values => {
             if (id)
-                put(`providers/${id}`, values)
+                put(`products/${id}`, values)
             else
-                post('providers', values)
+                post('products', values)
         },
     });
 
     useEffect(() => {
-        if (id && user) {
-            get(`providers/find/${id}`, (data) => {
-                formik.setValues({
-                    name: data.name,
-                    corporateName: data.corporateName
-                })
-            })
+        if (user) {
+            
+            if (id)
+                get(`products/find/${id}`, (data: any) => {
+                    formik.setValues({
+                        details: data.details,
+                        idType: data.idType,
+                        name: data.name,
+                        salePrice: data.salePrice
+                    })
+                });
         }
-    }, [id, user])
+    }, [user, id])
 
     return (
         <div className="App">
@@ -59,10 +65,10 @@ function NewProvider() {
                 <Grid item xs={12}>
                     <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
                         <>
-                            <Title>{id ? `Editar Fornecedor ${id}` : 'Cadastrar Fornecedor'}</Title>
+                            <Title>{id ? `Editar Serviço ${id}` : 'Cadastrar Serviço'}</Title>
                             <form onSubmit={formik.handleSubmit}>
                                 <Grid container spacing={2}>
-                                    <Grid item xs={4}>
+                                    <Grid item xs={10}>
                                         <Typography>Nome</Typography>
                                         <TextField
                                             fullWidth
@@ -74,16 +80,32 @@ function NewProvider() {
                                             helperText={formik.errors.name}
                                         />
                                     </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography>Razão Social</Typography>
+                                    <Grid item xs={2}>
+                                        <Typography>Valor Venda</Typography>
                                         <TextField
                                             fullWidth
-                                            id="corporateName"
+                                            type="number"
+                                            inputProps={{
+                                                step: ".01"
+                                            }}
+                                            id="salePrice"
                                             variant="standard"
-                                            error={!!formik.errors.corporateName}
+                                            error={!!formik.errors.salePrice}
                                             onChange={formik.handleChange}
-                                            value={formik.values.corporateName}
-                                            helperText={formik.errors.corporateName}
+                                            value={formik.values.salePrice}
+                                            helperText={formik.errors.salePrice}
+                                        />
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Typography>Detalhes</Typography>
+                                        <TextField
+                                            fullWidth
+                                            id="details"
+                                            variant="standard"
+                                            error={!!formik.errors.details}
+                                            onChange={formik.handleChange}
+                                            value={formik.values.details}
+                                            helperText={formik.errors.details}
                                         />
                                     </Grid>
                                     <Grid item xs={12}>
@@ -101,4 +123,4 @@ function NewProvider() {
     );
 }
 
-export default NewProvider;
+export default NewService;
