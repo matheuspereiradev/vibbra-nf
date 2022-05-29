@@ -5,13 +5,14 @@ import { User } from "../models/entities/User";
 export default {
 	render(user: User): unknown {
 		if (user) {
-			const { id, email, name, surname,company } = user;
+			const { id, email, name, surname,company,isOwner } = user;
 
 			return {
 				id,
 				email,
 				name,
 				surname,
+				isOwner,
 				company: companyView.render(company)
 			};
 		}

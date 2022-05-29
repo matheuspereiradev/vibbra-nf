@@ -25,7 +25,6 @@ export default function ChartExpenditureByCategory() {
     data.forEach(d => {
       dataFormat.push([d.name, +d.sum])
     });
-    console.log(dataFormat)
 
     setGraphData(dataFormat)
   }

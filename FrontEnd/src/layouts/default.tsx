@@ -70,11 +70,10 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const mdTheme = createTheme();
 
 interface Props {
-    titleKey: string;
     children: any;
 }
 
-export const DashboardLayout: React.FC<Props> = ({ titleKey, children }) => {
+export const DashboardLayout: React.FC<Props> = ({ children }) => {
     const [open, setOpen] = useState(true);
     const { user, logout } = useAuth();
 

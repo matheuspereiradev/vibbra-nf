@@ -26,17 +26,13 @@ function ServicesList() {
     ];
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <BasicListComponent
-                    backendRoute='products'
-                    frontendRoute='servicos'
-                    gridColumns={columns}
-                    label='Serviços'
-                    searchParams='types=SRV'
-                />
-            </DashboardLayout>
-        </div>
+        <BasicListComponent
+            backendRoute='products'
+            frontendRoute='servicos'
+            gridColumns={columns}
+            label='Serviços'
+            searchParams='types=SRV'
+        />
     );
 }
 

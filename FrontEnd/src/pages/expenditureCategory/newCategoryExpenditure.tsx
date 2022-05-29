@@ -54,51 +54,49 @@ function NewCategoryExpenditure() {
     }, [id, user])
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <>
-                            <Title>Cadastrar Categoria de Despesa</Title>
-                            <form onSubmit={formik.handleSubmit}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={4}>
-                                        <Typography>Nome</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="name"
-                                            variant="standard"
-                                            error={!!formik.errors.name}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.name}
-                                            helperText={formik.errors.name}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography>Descrição</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="description"
-                                            variant="standard"
-                                            error={!!formik.errors.description}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.description}
-                                            helperText={formik.errors.description}
-                                        />
-                                    </Grid>
-
-                                    <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
-                                            Salvar
-                                        </Button>
-                                    </Grid>
+        <>
+            <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                    <>
+                        <Title>Cadastrar Categoria de Despesa</Title>
+                        <form onSubmit={formik.handleSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={4}>
+                                    <Typography>Nome</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="name"
+                                        variant="standard"
+                                        error={!!formik.errors.name}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.name}
+                                        helperText={formik.errors.name}
+                                    />
                                 </Grid>
-                            </form>
-                        </>
-                    </Paper>
-                </Grid>
-            </DashboardLayout>
-        </div>
+                                <Grid item xs={8}>
+                                    <Typography>Descrição</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="description"
+                                        variant="standard"
+                                        error={!!formik.errors.description}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.description}
+                                        helperText={formik.errors.description}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12}>
+                                    <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
+                                        Salvar
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </>
+                </Paper>
+            </Grid>
+        </>
     );
 }
 

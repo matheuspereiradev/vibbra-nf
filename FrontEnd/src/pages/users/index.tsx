@@ -20,16 +20,14 @@ function UserList() {
     ];
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <BasicListComponent 
-                    backendRoute='users'
-                    frontendRoute='usuarios'
-                    gridColumns={columns}
-                    label='Usuários'
-                />
-            </DashboardLayout>
-        </div>
+        <>
+            <BasicListComponent
+                backendRoute='users'
+                frontendRoute='usuarios'
+                gridColumns={columns}
+                label='Usuários'
+            />
+        </>
     );
 }
 

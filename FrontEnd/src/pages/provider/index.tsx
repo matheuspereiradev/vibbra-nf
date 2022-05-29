@@ -19,16 +19,14 @@ function ProviderList() {
     ];
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <BasicListComponent 
-                    backendRoute='providers'
-                    frontendRoute='fornecedores'
-                    gridColumns={columns}
-                    label='Fornecedores'
-                />
-            </DashboardLayout>
-        </div>
+        <>
+            <BasicListComponent
+                backendRoute='providers'
+                frontendRoute='fornecedores'
+                gridColumns={columns}
+                label='Fornecedores'
+            />
+        </>
     );
 }
 

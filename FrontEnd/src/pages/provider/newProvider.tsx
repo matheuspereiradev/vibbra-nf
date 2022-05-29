@@ -30,8 +30,8 @@ function NewProvider() {
     const { post, put, get } = useBackend();
 
     const formik = useFormik({
-        validateOnChange:false,
-        validateOnBlur:false,
+        validateOnChange: false,
+        validateOnBlur: false,
         initialValues,
         validationSchema,
         onSubmit: values => {
@@ -54,50 +54,48 @@ function NewProvider() {
     }, [id, user])
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <>
-                            <Title>{id ? `Editar Fornecedor ${id}` : 'Cadastrar Fornecedor'}</Title>
-                            <form onSubmit={formik.handleSubmit}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={4}>
-                                        <Typography>Nome</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="name"
-                                            variant="standard"
-                                            error={!!formik.errors.name}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.name}
-                                            helperText={formik.errors.name}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography>Razão Social</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="corporateName"
-                                            variant="standard"
-                                            error={!!formik.errors.corporateName}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.corporateName}
-                                            helperText={formik.errors.corporateName}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
-                                            Salvar
-                                        </Button>
-                                    </Grid>
+        <>
+            <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                    <>
+                        <Title>{id ? `Editar Fornecedor ${id}` : 'Cadastrar Fornecedor'}</Title>
+                        <form onSubmit={formik.handleSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={4}>
+                                    <Typography>Nome</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="name"
+                                        variant="standard"
+                                        error={!!formik.errors.name}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.name}
+                                        helperText={formik.errors.name}
+                                    />
                                 </Grid>
-                            </form>
-                        </>
-                    </Paper>
-                </Grid>
-            </DashboardLayout>
-        </div>
+                                <Grid item xs={8}>
+                                    <Typography>Razão Social</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="corporateName"
+                                        variant="standard"
+                                        error={!!formik.errors.corporateName}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.corporateName}
+                                        helperText={formik.errors.corporateName}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
+                                        Salvar
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </>
+                </Paper>
+            </Grid>
+        </>
     );
 }
 

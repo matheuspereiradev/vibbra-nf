@@ -88,127 +88,125 @@ function NewExpenditure() {
     }, [user, id])
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <>
-                            <Title>{id ? `Editar Despesa ${id}` : 'Lançar Despesa'}</Title>
-                            <form onSubmit={formik.handleSubmit}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={1}>
-                                        <Typography>Valor</Typography>
-                                        <TextField
-                                            fullWidth
-                                            type="number"
-                                            id="amount"
-                                            inputProps={{
-                                                step: ".01"
-                                            }}
-                                            variant="standard"
-                                            error={!!formik.errors.amount}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.amount}
-                                            helperText={formik.errors.amount}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={7}>
-                                        <Typography>Descrição</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="description"
-                                            variant="standard"
-                                            error={!!formik.errors.description}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.description}
-                                            helperText={formik.errors.description}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography>Data de pagamento</Typography>
-                                        <TextField
-                                            fullWidth
-                                            type="date"
-                                            id="paymentDate"
-                                            variant="standard"
-                                            error={!!formik.errors.paymentDate}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.paymentDate}
-                                            helperText={formik.errors.paymentDate}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography>Competência</Typography>
-                                        <TextField
-                                            fullWidth
-                                            type="month"
-                                            id="competence"
-                                            variant="standard"
-                                            error={!!formik.errors.competence}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.competence}
-                                            helperText={formik.errors.competence}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography>Fornecedor</Typography>
-                                        <TextField
-                                            variant="standard"
-                                            fullWidth
-                                            name="idProvider"
-                                            id="idProvider"
-                                            select
-                                            value={formik.values.idProvider}
-                                            onChange={formik.handleChange}
-                                            error={!!formik.errors.idProvider}
-                                            helperText={formik.errors.idProvider}
-                                        >
-                                            <MenuItem key="0" value={0}>
-                                                Selecione um fornecedor
-                                            </MenuItem>
-                                            {providers?.map((provider) => (
-                                                <MenuItem key={provider.id} value={provider.id}>
-                                                    {`${provider.name}`}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography>Categoria</Typography>
-
-                                        <TextField
-                                            variant="standard"
-                                            fullWidth
-                                            name="idCategory"
-                                            id="idCategory"
-                                            select
-                                            value={formik.values.idCategory}
-                                            onChange={formik.handleChange}
-                                            error={!!formik.errors.idCategory}
-                                            helperText={formik.errors.idCategory}
-                                        >
-                                            <MenuItem key={0} value={0}>
-                                                Selecione uma categoria
-                                            </MenuItem>
-                                            {categories?.map((option) => (
-                                                <MenuItem key={option.id} value={option.id}>
-                                                    {option.name}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
-                                            Salvar
-                                        </Button>
-                                    </Grid>
+        <>
+            <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                    <>
+                        <Title>{id ? `Editar Despesa ${id}` : 'Lançar Despesa'}</Title>
+                        <form onSubmit={formik.handleSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={1}>
+                                    <Typography>Valor</Typography>
+                                    <TextField
+                                        fullWidth
+                                        type="number"
+                                        id="amount"
+                                        inputProps={{
+                                            step: ".01"
+                                        }}
+                                        variant="standard"
+                                        error={!!formik.errors.amount}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.amount}
+                                        helperText={formik.errors.amount}
+                                    />
                                 </Grid>
-                            </form>
-                        </>
-                    </Paper>
-                </Grid>
-            </DashboardLayout>
-        </div >
+                                <Grid item xs={7}>
+                                    <Typography>Descrição</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="description"
+                                        variant="standard"
+                                        error={!!formik.errors.description}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.description}
+                                        helperText={formik.errors.description}
+                                    />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography>Data de pagamento</Typography>
+                                    <TextField
+                                        fullWidth
+                                        type="date"
+                                        id="paymentDate"
+                                        variant="standard"
+                                        error={!!formik.errors.paymentDate}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.paymentDate}
+                                        helperText={formik.errors.paymentDate}
+                                    />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography>Competência</Typography>
+                                    <TextField
+                                        fullWidth
+                                        type="month"
+                                        id="competence"
+                                        variant="standard"
+                                        error={!!formik.errors.competence}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.competence}
+                                        helperText={formik.errors.competence}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography>Fornecedor</Typography>
+                                    <TextField
+                                        variant="standard"
+                                        fullWidth
+                                        name="idProvider"
+                                        id="idProvider"
+                                        select
+                                        value={formik.values.idProvider}
+                                        onChange={formik.handleChange}
+                                        error={!!formik.errors.idProvider}
+                                        helperText={formik.errors.idProvider}
+                                    >
+                                        <MenuItem key="0" value={0}>
+                                            Selecione um fornecedor
+                                        </MenuItem>
+                                        {providers?.map((provider) => (
+                                            <MenuItem key={provider.id} value={provider.id}>
+                                                {`${provider.name}`}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography>Categoria</Typography>
+
+                                    <TextField
+                                        variant="standard"
+                                        fullWidth
+                                        name="idCategory"
+                                        id="idCategory"
+                                        select
+                                        value={formik.values.idCategory}
+                                        onChange={formik.handleChange}
+                                        error={!!formik.errors.idCategory}
+                                        helperText={formik.errors.idCategory}
+                                    >
+                                        <MenuItem key={0} value={0}>
+                                            Selecione uma categoria
+                                        </MenuItem>
+                                        {categories?.map((option) => (
+                                            <MenuItem key={option.id} value={option.id}>
+                                                {option.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
+                                        Salvar
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </>
+                </Paper>
+            </Grid>
+        </>
     );
 }
 

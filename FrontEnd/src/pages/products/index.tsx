@@ -48,17 +48,15 @@ function ProductList() {
     ];
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <BasicListComponent
-                    backendRoute='products'
-                    frontendRoute='produtos'
-                    gridColumns={columns}
-                    label='Produtos'
-                    searchParams='types=PAC,PPD,INS'
-                />
-            </DashboardLayout>
-        </div>
+        <>
+            <BasicListComponent
+                backendRoute='products'
+                frontendRoute='produtos'
+                gridColumns={columns}
+                label='Produtos'
+                searchParams='types=PAC,PPD,INS'
+            />
+        </>
     );
 }
 

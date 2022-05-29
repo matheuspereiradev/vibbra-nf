@@ -41,8 +41,8 @@ function NewUser() {
     const { post, put, get } = useBackend();
 
     const formik = useFormik({
-        validateOnChange:false,
-        validateOnBlur:false,
+        validateOnChange: false,
+        validateOnBlur: false,
         initialValues,
         validationSchema,
         onSubmit: values => {
@@ -67,76 +67,74 @@ function NewUser() {
     }, [id, user])
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <>
-                            <Title>Cadastrar Usuário</Title>
-                            <form onSubmit={formik.handleSubmit}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={6}>
-                                        <Typography>Nome</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="name"
-                                            variant="standard"
-                                            error={!!formik.errors.name}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.name}
-                                            helperText={formik.errors.name}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography>Sobrenome</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="surname"
-                                            variant="standard"
-                                            error={!!formik.errors.surname}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.surname}
-                                            helperText={formik.errors.surname}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography>Email</Typography>
-                                        <TextField
-                                            type="email"
-                                            fullWidth
-                                            id="email"
-                                            variant="standard"
-                                            error={!!formik.errors.email}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.email}
-                                            helperText={formik.errors.email}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={6}>
-                                        <Typography>Senha</Typography>
-                                        <TextField
-                                            type="password"
-                                            fullWidth
-                                            id="password"
-                                            variant="standard"
-                                            error={!!formik.errors.password}
-                                            onChange={formik.handleChange}
-                                            value={formik.values.password}
-                                            helperText={formik.errors.password}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
-                                            Salvar
-                                        </Button>
-                                    </Grid>
+        <>
+            <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                    <>
+                        <Title>Cadastrar Usuário</Title>
+                        <form onSubmit={formik.handleSubmit}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={6}>
+                                    <Typography>Nome</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="name"
+                                        variant="standard"
+                                        error={!!formik.errors.name}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.name}
+                                        helperText={formik.errors.name}
+                                    />
                                 </Grid>
-                            </form>
-                        </>
-                    </Paper>
-                </Grid>
-            </DashboardLayout>
-        </div>
+                                <Grid item xs={6}>
+                                    <Typography>Sobrenome</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="surname"
+                                        variant="standard"
+                                        error={!!formik.errors.surname}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.surname}
+                                        helperText={formik.errors.surname}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography>Email</Typography>
+                                    <TextField
+                                        type="email"
+                                        fullWidth
+                                        id="email"
+                                        variant="standard"
+                                        error={!!formik.errors.email}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.email}
+                                        helperText={formik.errors.email}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <Typography>Senha</Typography>
+                                    <TextField
+                                        type="password"
+                                        fullWidth
+                                        id="password"
+                                        variant="standard"
+                                        error={!!formik.errors.password}
+                                        onChange={formik.handleChange}
+                                        value={formik.values.password}
+                                        helperText={formik.errors.password}
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
+                                        Salvar
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </>
+                </Paper>
+            </Grid>
+        </>
     );
 }
 

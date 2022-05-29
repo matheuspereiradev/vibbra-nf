@@ -57,17 +57,14 @@ export const expenditureColumns: GridColDef[] = [
 function ExpendituresList() {
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <BasicListComponent
-                    label='Despesas'
-                    backendRoute='expenditures'
-                    frontendRoute='despesas'
-                    gridColumns={expenditureColumns}
-                />
-
-            </DashboardLayout>
-        </div>
+        <>
+            <BasicListComponent
+                label='Despesas'
+                backendRoute='expenditures'
+                frontendRoute='despesas'
+                gridColumns={expenditureColumns}
+            />
+        </>
     );
 }
 

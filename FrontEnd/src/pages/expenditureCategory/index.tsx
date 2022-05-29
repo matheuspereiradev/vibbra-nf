@@ -18,16 +18,14 @@ function ExpenditureCategoryList() {
     ];
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
+        <>
                 <BasicListComponent 
                     backendRoute='expenditures/categories'
                     frontendRoute='categoriasdedespesa'
                     gridColumns={columns}
                     label='Categorias de despesa'
                 />
-            </DashboardLayout>
-        </div>
+        </>
     );
 }
 

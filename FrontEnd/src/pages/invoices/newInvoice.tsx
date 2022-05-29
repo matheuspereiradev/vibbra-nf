@@ -101,95 +101,93 @@ function NewInvoice() {
     }, [user])
 
     return (
-        <div className="App">
-            <DashboardLayout titleKey='Teste'>
-                <Grid item xs={12}>
-                    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
-                        <>
-                            <Title>{id ? `Editar Nota Fiscal ${id}` : 'Lançar Nota Fiscal'}</Title>
-                            <form onSubmit={handleSubmit(onSubmit)}>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={1}>
-                                        <Typography>Valor</Typography>
-                                        <TextField
-                                            fullWidth
-                                            type="number"
-                                            id="amount"
-                                            inputProps={{
-                                                step: ".01"
-                                            }}
-                                            variant="standard"
-                                            {...register("amount", { required: true })}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={7}>
-                                        <Typography>Número da NF</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="nf-number"
-                                            variant="standard"
-                                            {...register("nfNumber", { required: true })}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography>Data recebimento</Typography>
-                                        <TextField
-                                            fullWidth
-                                            defaultValue={format(parseISO(String(new Date().toISOString())), 'yyyy-MM-dd')}
-                                            type="date"
-                                            id="receipt-name"
-                                            variant="standard"
-                                            {...register("receiptDate", { required: true })} />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <Typography>Competência</Typography>
-                                        <TextField
-                                            fullWidth
-                                            type="month"
-                                            id="competence"
-                                            defaultValue={format(parseISO(String(new Date().toISOString())), 'yyyy-MM')}
-                                            variant="standard"
-                                            {...register("competence", { required: true })} />
-                                    </Grid>
-                                    <Grid item xs={8}>
-                                        <Typography>Descrição</Typography>
-                                        <TextField
-                                            fullWidth
-                                            id="description"
-                                            variant="standard"
-                                            {...register("description", { required: true })}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <Typography>Empresa</Typography>
-                                        <TextField
-                                            id="select-company"
-                                            select
-                                            fullWidth
-                                            variant="standard"
-                                            {...register("idCompany")}
-                                        >
-                                            {companies?.map((company) => (
-                                                <MenuItem key={company.cnpj} value={company.id}>
-                                                    {`${company.name} - ${company.cnpj}`}
-                                                </MenuItem>
-                                            ))}
-                                        </TextField>
-
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
-
-                                            Salvar
-                                        </Button>
-                                    </Grid>
+        <>
+            <Grid item xs={12}>
+                <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+                    <>
+                        <Title>{id ? `Editar Nota Fiscal ${id}` : 'Lançar Nota Fiscal'}</Title>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <Grid container spacing={2}>
+                                <Grid item xs={1}>
+                                    <Typography>Valor</Typography>
+                                    <TextField
+                                        fullWidth
+                                        type="number"
+                                        id="amount"
+                                        inputProps={{
+                                            step: ".01"
+                                        }}
+                                        variant="standard"
+                                        {...register("amount", { required: true })}
+                                    />
                                 </Grid>
-                            </form>
-                        </>
-                    </Paper>
-                </Grid>
-            </DashboardLayout>
-        </div>
+                                <Grid item xs={7}>
+                                    <Typography>Número da NF</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="nf-number"
+                                        variant="standard"
+                                        {...register("nfNumber", { required: true })}
+                                    />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography>Data recebimento</Typography>
+                                    <TextField
+                                        fullWidth
+                                        defaultValue={format(parseISO(String(new Date().toISOString())), 'yyyy-MM-dd')}
+                                        type="date"
+                                        id="receipt-name"
+                                        variant="standard"
+                                        {...register("receiptDate", { required: true })} />
+                                </Grid>
+                                <Grid item xs={2}>
+                                    <Typography>Competência</Typography>
+                                    <TextField
+                                        fullWidth
+                                        type="month"
+                                        id="competence"
+                                        defaultValue={format(parseISO(String(new Date().toISOString())), 'yyyy-MM')}
+                                        variant="standard"
+                                        {...register("competence", { required: true })} />
+                                </Grid>
+                                <Grid item xs={8}>
+                                    <Typography>Descrição</Typography>
+                                    <TextField
+                                        fullWidth
+                                        id="description"
+                                        variant="standard"
+                                        {...register("description", { required: true })}
+                                    />
+                                </Grid>
+                                <Grid item xs={4}>
+                                    <Typography>Empresa</Typography>
+                                    <TextField
+                                        id="select-company"
+                                        select
+                                        fullWidth
+                                        variant="standard"
+                                        {...register("idCompany")}
+                                    >
+                                        {companies?.map((company) => (
+                                            <MenuItem key={company.cnpj} value={company.id}>
+                                                {`${company.name} - ${company.cnpj}`}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <Button type="submit" fullWidth variant="contained" startIcon={<Save />}>
+
+                                        Salvar
+                                    </Button>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </>
+                </Paper>
+            </Grid>
+        </>
     );
 }
 

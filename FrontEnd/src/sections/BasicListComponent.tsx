@@ -74,7 +74,9 @@ function BasicListComponent({ gridColumns, backendRoute, frontendRoute, label, s
             .then(({ data }) => {
                 setRows(data)
             })
-            .catch(() => {
+            .catch(({response}) => {
+                console.log(response)
+                console.log('Mensagem',response.data)
                 Swal.fire(
                     'Ops!',
                     `Ocorreu um erro ao carregar registros, se persistir contate o suporte.`,
